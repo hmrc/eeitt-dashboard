@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-/**
-  * Created by daniel-connelly on 29/01/17.
-  */
 import java.net.URL
 
 import com.fasterxml.jackson.databind.{ObjectMapper, PropertyNamingStrategy}

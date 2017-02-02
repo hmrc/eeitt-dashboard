@@ -29,8 +29,6 @@ import scala.sys.process.Process
 
 class WriteInteraction {
 
-  val agentQuery = "app:\"eeitt\" AND NOT app:\"eeitt-frontend\" AND \"registration of agent\""
-  val buissnessUserQuery = "app:\"eeitt\" AND NOT app:\"eeitt-frontend\" AND \"registration of business\""
   val dataCenters = Map(
     "Qa" -> "https://kibana-datacentred-sal01-qa.tax.service.gov.uk/elasticsearch/logstash-qa*/_search?pretty",
     "Aws" -> "https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty",
@@ -40,7 +38,8 @@ class WriteInteraction {
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
 
-  val key = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDORb8tgN4XLrXBYtCEmJGrTrrD62gAa/tlUxTAdtBunpMkZMhuX6vzk9JJ7+db2XrxR8eKUX7ErzcokbSEmSiwsbJB0GGTJfhWMavSWpe/29pFfzp767CTVd6AlTGwaTIaUS/MFoNmcPjU//29N5Rm1yWd33sLyPOfwQukpqJXpYBO2GEMCzDz6fvEoxeMGgzFjjRW1ck/t0WmsrJ0CafAdvhTttmHFyJEHdY5JC6MK70ksgFbnyIDQsdnzPEK2Pn6+Ql32Ff5yIS0TE+hNr8p4XtZ6XYvmmWLq8VuEsSH4rQpwXTH902cosnhWi8RBahM2NvHDXKX4K/IWKovb9j3AgMBAAECggEAexoU5ksqQBuYTTlzyC5lgR8TRymOf/Hxrp7Om65M5jetCOM82uIt9MgbkBSktqQsQyLbaykHxsnq2UNbwGbHaewivjRmhzL56jbqnDeEqPPEaAVuGdanIsb0azie1vFw/VPGer5U3SY+2p+MBwjMgDOWN4nQHVBoVMcY88Ke0D7aZNnsfJ5VQ/UL1jZhegKDropryM3wfuRPMzAGPdAzTCSojHdJH44sdj+uW77Uvcz+p6516C5T86becIoCYVtLFXtWc6PQTUbrOeI8CyawD5ehwmjLzfN+Vhnzf5NEDwWmQABUv2dbfan3Cjq4FvBsq9NTMeixAM1BqExQuiFGgQKBgQD06j5DUl+Efvzyhh4eDipNvRTmwla8dyuuYzUPvk9QVL515IDu4EQyDUJ1pGwbINg4BvhV4dQ5+i9vCvBcOcCwK+3X2Ro/GPCeIB5BX/UNosXEx+sGFX+2JnWONN7HmP9YOIoBWbbs6Yop2pQILXeD26Dy4ydb2K8F1IIl+kB5jwKBgQDXm8OGq04JisxdALeccPoTpNcsd0RKb0nIpQwNVX70iDTJiQbA+o5eniQUG/1ZIr2TvzrdH85jOzhncm6Z37gfLj+9bzwo/7CgJWXIa6b+aDdnb/ELeDRDJtiiMJ+sfU2EA9CHEX2fcwVt/izRyf++x2gxvpdeeT/JH8iHaXtmGQKBgG/m9zvbTzlCrGBDV090OW/7jKlC8k56RMMRIRVoZuTVU5CaLy712TLlTBBkZ+CdSS2QQbc7z7QN085wuRHqcVgNOkb9MzjRNF+LXUeRiG4KiUI39fJ5sDiRqfSnw4J/LWwpqSSk0Se+LRqifDCgVZMxroBLuZgFkTKgvjaL+RmRAoGBAL1lDZehqTZGn4he1ettbq+M0Js11V5Rbg37tZ+M562kbEJQxQcF0cQZxHWJtL30/3Tmua1+gAy4+64bXj56wEFbnhAowz78hEnZMBSjRBkcsPaC5cn+eGI4oHmwnsKle08pDqdnXOOQ5UcezH4opCgRAF0aH9uURMzGx57zsLsZAoGAMNqV9wTatQXG9f7UO8KKhLfM0w1HBk65GOrJTSEiIgKA4vjgG1TDvsM9m8C3tcl7ydPei7SMFQdBea4Z/j2kpjbU4WECgUzSHbhinvo0Xsq83z1a0GyShfvw1OWiTcRHJy5zHFWrpQwllE9ONgz11lcL5N+liOCCiEK6SruqT+g="
+  val key = sys.env("PRIVATEKEY")
+
   val privateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
 
   def oauthOneTimeCode = {
@@ -49,7 +48,7 @@ class WriteInteraction {
 
     val accessToken = getAccessToken
 
-    serviceSpreadSheet.getWorksheetByName(accessToken, "1MxtMktH5h8F8Gq0S8qrRCv8SBNip7GGBvKmOnRGbVf0", privateKey, dataMap)
+    serviceSpreadSheet.getWorksheetByName(accessToken, sys.env("FILEID"), privateKey, dataMap)
   }
 
   def getCurlResults : Map[String, List[String]] = {
@@ -82,7 +81,7 @@ class WriteInteraction {
 
     val payload = new JsonWebToken.Payload
     payload.set("scope", "https://spreadsheets.google.com/feeds/spreadsheets https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive")
-    payload.setIssuer("test-57@usagereportingautomation.iam.gserviceaccount.com")//"test-57@usagereportingautomation.iam.gserviceaccount.com")
+    payload.setIssuer("test-57@usagereportingautomation.iam.gserviceaccount.com")
     payload.setAudience("https://www.googleapis.com/oauth2/v4/token")
     payload.setSubject("daniel.connelly@digital.hmrc.gov.uk")
     payload.setIssuedAtTimeSeconds(issueTime)

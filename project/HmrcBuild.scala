@@ -21,9 +21,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 object HmrcBuild extends Build {
 
-  import Dependencies._
-  import uk.gov.hmrc.DefaultBuildSettings._
-
   val appName = "eeitt-dashboard"
 
   val appDependencies = Seq(
