@@ -45,9 +45,9 @@ class WriteInteraction {
 
   def oauthOneTimeCode = {
 
-    val accessToken = getAccessToken
-
     val dataMap = getCurlResults
+
+    val accessToken = getAccessToken
 
     serviceSpreadSheet.getWorksheetByName(accessToken, "1MxtMktH5h8F8Gq0S8qrRCv8SBNip7GGBvKmOnRGbVf0", privateKey, dataMap)
   }
