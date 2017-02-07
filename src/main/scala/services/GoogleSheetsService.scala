@@ -17,7 +17,7 @@
 package services
 
 import java.security.PrivateKey
-import java.time.LocalDate
+import java.time.{LocalDate, Period}
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -28,7 +28,6 @@ import com.google.api.services.sheets.v4.model.ValueRange
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
 import scalaz.Scalaz._
-import scalaz._
 
 class GoogleSheetsService {
 
@@ -63,18 +62,20 @@ class GoogleSheetsService {
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers : Int = info.values.sum
     val numOfAgents : Int = data("Agents").size
+    val date :LocalDate = LocalDate.now.minus(Period.ofDays(1))
+    println(date)
     val values : java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
-        stringToAnyRef(LocalDate.now.toString),
+        stringToAnyRef(date.toString),
         intToAnyRef(totalBuissnessUsers),
         intToAnyRef(numOfAgents),
         intToAnyRef(info("'AL'")),
+        intToAnyRef(info("'AP'")),
         intToAnyRef(info("'BD'")),
         intToAnyRef(info("'GD'")),
+        intToAnyRef(info("'IP'")),
         intToAnyRef(info("'LD'")),
         intToAnyRef(info("'LF'")),
-        intToAnyRef(info("'IP'")),
-        intToAnyRef(info("'AP'")),
         intToAnyRef(data("Frontend").size),
         intToAnyRef(data("Backend").size),
         intToAnyRef(uniqueUsers)

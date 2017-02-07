@@ -25,7 +25,6 @@ import scalaj.http.{HttpResponse, _}
 class AuthService {
 
   def buildCredentialServiceAccount(string: String):TokenResponseSA = {
-    println("Inside BuildCredentialServiceAccount")
     val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
       "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
       "assertion" -> string

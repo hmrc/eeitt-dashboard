@@ -16,10 +16,12 @@
 
 package controllers
 
+import java.security.PrivateKey
 import java.time.Instant
 
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.json.webtoken.{JsonWebSignature, JsonWebToken}
+import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import models.JsonClass
 import play.api.libs.json.{JsObject, JsValue, Json}
 import services.{AuthService, GoogleSheetsService}
@@ -38,11 +40,11 @@ class WriteInteraction {
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
 
-  val key = sys.env("PRIVATEKEY")
+  val key : String = sys.env("PRIVATEKEY")
 
-  val privateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
+  val privateKey : PrivateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
 
-  def oauthOneTimeCode = {
+  def oauthOneTimeCode : AppendValuesResponse = {
 
     val dataMap = getCurlResults
 
@@ -99,27 +101,27 @@ class WriteInteraction {
 
   def resultsAgentQuery(start:Int, end:Int) : List[String] ={
     val resultAws = Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCenters("Aws")}") !!)
-    val resultSkyscape = Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCenters("Skyscape")}") !!)
+//    val resultSkyscape = Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCenters("Skyscape")}") !!)
     parseJsonFromRequest(resultAws)
   }
 
   def resultsBuissnessQuery(start:Int, end:Int) : List[String] ={
     val resultAws = Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCenters("Aws")}") !!)
-    val resultSkyscape = Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCenters("Skyscape")}") !!)
+//    val resultSkyscape = Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCenters("Skyscape")}") !!)
     parseJsonFromRequest(resultAws)
   }
 
   def resultsFrontendVerificationAws(start:Int, end:Int) : List[String] = {
     val result = List(jsonResultFrontendAws(start, end))
-    if(checkFor500(result(0))){
+    if(checkFor500(result.head)){
       val half = List(jsonResultFrontendAws(start, end/2), jsonResultFrontendAws(end/2, end))
-      if(checkFor500(half(0)) || checkFor500(half(1))) {
+      if(checkFor500(half.head) || checkFor500(half.last)) {
         List("")
       } else {
-        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
+        parseJsonFromRequest(half.head).++(parseJsonFromRequest(half.last))
       }
     } else {
-      parseJsonFromRequest(result(0))
+      parseJsonFromRequest(result.head)
     }
   }
 
@@ -163,7 +165,6 @@ class WriteInteraction {
 
   def findErrors(list:List[String]) = {
     val errorFree = list.filter(p => !p.startsWith("request"))
-    println(errorFree.size)
     errorFree
   }
 

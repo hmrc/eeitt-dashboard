@@ -12,7 +12,7 @@ DATE_MILLIS="$(date --date=${DATE} +%s)000"
 DATE_START_MILLIS=$(($DATE_MILLIS+${STARTHOURS}*3600000-1))
 DATE_END_MILLIS=$(($DATE_MILLIS+${ENDHOURS}*3600000))
 
-curl -X POST -u daniel.connelly:$VPNPASS -H "kbn-xsrf: kibana" -d '{
+curl -X POST -u $VPNU:$VPNPASS -H "kbn-xsrf: kibana" -d '{
 "size":500,
 "query":{
 "bool":{
