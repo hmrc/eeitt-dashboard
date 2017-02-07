@@ -16,15 +16,8 @@
 
 package models
 
-case class TokenResponseSA(
+case class TokenResponse(
                           accessToken: String,
-                          tokenType: String,
-                          expiresIn: Int
-                        )
-
-case class TokenResponseC(
-                          accessToken: String,
-                          refreshToken : String,
                           tokenType: String,
                           expiresIn: Int
                         )

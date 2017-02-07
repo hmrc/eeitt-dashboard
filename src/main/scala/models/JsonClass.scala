@@ -19,13 +19,13 @@ package models
 import play.api.libs.json.Json
 
 
-case class JsonClass(app:String,
+case class JsonClass(app: String,
                      hostname: String,
                      timestamp: String,
-                     message:String,
-                     logger:String,
-                     thread:String,
-                     level:String
+                     message: String,
+                     logger: String,
+                     thread: String,
+                     level: String
                     )
 
 object JsonClass {

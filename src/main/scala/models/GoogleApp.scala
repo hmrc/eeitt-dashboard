@@ -16,8 +16,9 @@
 
 package models
 
+import java.security.PrivateKey
+
 case class GoogleApp(
-                      clientId: String,
-                      clientSecret: String,
-                      redirect_uris: List[String]
+                      privateKey: PrivateKey,
+                      clientEmail: String
                     )
