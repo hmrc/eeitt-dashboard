@@ -15,13 +15,13 @@
  */
 
 package controllers
+import scala.io.Source
+import models.GoogleApp
+import services.Json
 
 object Simulation extends App {
+ // lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
   val inst = new WriteInteraction
-
-  val result = inst.oauthOneTimeCode
-
-  println(result)
-
+  inst.oauthOneTimeCode
 }

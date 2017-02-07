@@ -16,9 +16,16 @@
 
 package models
 
-import java.security.PrivateKey
+import play.api.libs.json.{Json, Reads}
 
 case class GoogleApp(
-                      privateKey: PrivateKey,
-                      clientEmail: String
+                      privateKey: String,
+                      clientEmail: String,
+                      fileId: String,
+                      userImpersonation: String
+
                     )
+
+object GoogleApp {
+  implicit val format: Reads[GoogleApp] = Json.reads[GoogleApp]
+}
