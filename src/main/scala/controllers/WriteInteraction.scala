@@ -23,15 +23,16 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.json.webtoken.{JsonWebSignature, JsonWebToken}
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import models.{GoogleApp, JsonClass}
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, _}
 import services.{AuthService, GoogleSheetsService, Json}
-
 import uk.gov.hmrc.secure.AsymmetricDecrypter
 
 import scala.sys.process.Process
 
 class WriteInteraction {
+
   lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
+
   val dataCenters = Map(
     "Qa" -> "https://kibana-datacentred-sal01-qa.tax.service.gov.uk/elasticsearch/logstash-qa*/_search?pretty",
     "Aws" -> "https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty",
@@ -192,12 +193,14 @@ class WriteInteraction {
   private def parseJsonFromRequest(json: JsValue) = {
     val list = json \ "hits" \ "hits"
 
-    val resultList = list.as[List[JsObject]].map { x =>
-      val obj = (x \ "_source" \ "log").as[String]
-      val some = play.api.libs.json.Json.parse(obj).as[JsonClass]
-      some.message
+    list.as[List[JsObject]].map { x =>
+      (x \ "_source" \ "log").validate[String].map{
+        case y =>
+          val some = play.api.libs.json.Json.parse(y).as[JsonClass]
+          some.message
+        case _ => ""
+      }.get
     }
-    resultList
   }
 
   private def checkFor500(json: JsValue): Boolean = {
