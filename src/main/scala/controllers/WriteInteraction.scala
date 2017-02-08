@@ -91,17 +91,11 @@ class WriteInteraction {
     )
   }
 
-  def compareDataCentreResults(first: List[String], second: List[String]): Boolean = {
-    first.size == second.size
-  }
-  
   def getAccessToken: String = {
     val signature = PreconfiguredJWT.createPreConfiguredJWT
     authService.buildCredentialServiceAccount(signature).accessToken
   }
 
-  def findErrors(list: List[String]) = {
-    val errorFree = list.filter(p => !p.startsWith("request"))
-    errorFree
-  }
+
+
 }

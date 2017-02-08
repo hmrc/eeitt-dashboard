@@ -29,4 +29,13 @@ package object controllers {
     val hits = json \ "hits" \ "total"
     hits.get.as[Int] >= 500
   }
+
+  def findErrors(list: List[String]) = {
+    val errorFree = list.filter(p => !p.startsWith("request"))
+    errorFree
+  }
+
+  def compareDataCentreResults(first: List[String], second: List[String]): Boolean = {
+    first.size == second.size
+  }
 }
