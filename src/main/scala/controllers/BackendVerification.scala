@@ -25,7 +25,6 @@ class BackendVerification(dataCentre: String){
         results
       }
     }
-
     private def jsonResultBackendAws(start: Int, end: Int) = {
       play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end ${dataCentre}") !!)
     }
