@@ -40,7 +40,14 @@ object HmrcBuild extends Build {
     "com.google.apis" % "google-api-services-drive" % "v3-rev56-1.22.0",
     "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.8.4",
     "com.netaporter" % "scala-uri_2.11" % "0.4.16",
-    "org.scalaj" %% "scalaj-http" % "2.3.0"
+    "org.scalaj" %% "scalaj-http" % "2.3.0",
+    "uk.gov.hmrc" %% "hmrctest" % "2.2.0" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.6" % "test",
+    "org.pegdown" % "pegdown" % "1.6.0" % "test",
+    "org.jsoup" % "jsoup" % "1.8.1" % "test",
+    //    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+//    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test"
   )
 
   lazy val library = Project(appName, file("."))

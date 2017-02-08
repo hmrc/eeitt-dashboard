@@ -55,11 +55,13 @@ class WriteInteraction {
 
   def getCurlResults : Map[String, List[String]] = {
 
-    val resultFrontend = resultsFrontendVerificationAws(0, 24) -> resultsFrontendVerificationSkyscape(0, 24)
-    val resultBackend = resultsBackEndVerificationAws(0 ,24) -> resultsBackEndVerificationSkyscape(0, 24)
-    val frontend = findErrors(resultsFrontendVerificationAws(0, 24))
+//    val resultFrontend = resultsFrontendVerificationAws(0, 24) -> resultsFrontendVerificationSkyscape(0, 24)
+//    val resultBackend = resultsBackEndVerificationAws(0 ,24) -> resultsBackEndVerificationSkyscape(0, 24)
+    val frontend = findErrors(getFrontendAws(0, 24, checkFor500, parseJsonFromRequest, 500))
+//    val frontend = findErrors(resultsFrontendVerificationAws(0, 24))
 
-    val backend :List[String ] = findErrors(resultsBackEndVerificationAws(0 ,24))
+    val backend :List[String ] = findErrors(getBackendAws(0 ,24, checkFor500, parseJsonFromRequest, 500))
+//    val backend = findErrors(resultsBackEndVerificationAws(0, 24))
 
     Map(
       "BusinessUsers" -> resultsBuissnessQuery(0, 24),
@@ -111,82 +113,153 @@ class WriteInteraction {
     parseJsonFromRequest(resultAws)
   }
 
-  def resultsFrontendVerificationAws(start:Int, end:Int) : List[String] = {
-    val result = List(jsonResultFrontendAws(start, end))
-    if(checkFor500(result.head)){
-      val half = List(jsonResultFrontendAws(start, end/2), jsonResultFrontendAws(end/2, end))
-      if(checkFor500(half.head) || checkFor500(half.last)) {
-        List("")
-      } else {
-        parseJsonFromRequest(half.head).++(parseJsonFromRequest(half.last))
-      }
-    } else {
-      parseJsonFromRequest(result.head)
-    }
-  }
+//  def resultsFrontendVerificationAws(start:Int, end:Int) : List[String] = {
+//    val result = List(jsonResultFrontendAws(start, end))
+//    if(checkFor500(result.head)){
+//      val half = List(jsonResultFrontendAws(start, end/2), jsonResultFrontendAws(end/2, end))
+//      if(checkFor500(half(0)) || checkFor500(half(1))){
+//        val half2 = List(jsonResultFrontendSkyscape(start, end/3), jsonResultFrontendAws(end/3, (end/1.5).toInt), jsonResultFrontendAws((end/1.5).toInt, end))
+//        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
+//          val half3 = List(jsonResultFrontendAws(start, end/4), jsonResultFrontendAws(end/4, (end/4)*2), jsonResultFrontendAws((end/4)*2, (end/4)*3), jsonResultFrontendAws((end/4)*3, (end)))
+//          parseJsonFromRequest(half3(0)).++( parseJsonFromRequest(half3(1))).++( parseJsonFromRequest(half3(2))).++( parseJsonFromRequest(half3(3)))
+//        } else {
+//          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
+//        }
+//      } else {
+//        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
+//      }
+//    } else {
+//      parseJsonFromRequest(result.head)
+//    }
+//  }
 
-  def resultsFrontendVerificationSkyscape(start:Int, end:Int) : List[String] = {
-    val result = List(jsonResultFrontendSkyscape(start, end))
-    if(checkFor500(result(0))){
-      val half = List(jsonResultFrontendSkyscape(start, end/2), jsonResultFrontendSkyscape(end/2, end))
-      if(checkFor500(half(0)) || checkFor500(half(1))) {
-        List("")
-      } else {
-        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
-      }
-    } else {
-      parseJsonFromRequest(result(0))
-    }
-  }
+//  def resultsFrontendVerificationSkyscape(start:Int, end:Int) : List[String] = {
+//    val result = List(jsonResultFrontendSkyscape(start, end))
+//    if(checkFor500(result(0))){
+//      val half = List(jsonResultFrontendSkyscape(start, end/2), jsonResultFrontendSkyscape(end/2, end))
+//      if(checkFor500(half(0)) || checkFor500(half(1))){
+//        val half2 = List(jsonResultFrontendSkyscape(start, end/3), jsonResultFrontendSkyscape(end/3, (end/1.5).toInt), jsonResultFrontendSkyscape((end/1.5).toInt, end))
+//        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
+//          val half3 = List(jsonResultFrontendSkyscape(start, end/4), jsonResultFrontendSkyscape(end/4, (end/4)*2), jsonResultFrontendSkyscape((end/4)*2, (end/4)*3), jsonResultFrontendSkyscape((end/4)*3, (end)))
+//          parseJsonFromRequest(half3(0)).++( parseJsonFromRequest(half3(1))).++( parseJsonFromRequest(half3(2))).++( parseJsonFromRequest(half3(3)))
+//        } else {
+//          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
+//        }
+//      } else {
+//        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
+//      }
+//    } else {
+//      parseJsonFromRequest(result(0))
+//    }
+//  }
 
   private def combineDatacentreResults(first:List[String], second:List[String]): List[String] = {
     first.++(second)
   }
 
-  def resultsBackEndVerificationAws(start:Int, end:Int) : List[String] ={
-    val result = List(jsonResultBackendAws(start, end)) // 24 Hours
-    if(checkFor500(result(0))){
-      val half = List(jsonResultBackendAws(start, end/2), jsonResultBackendAws((end/2), end))
-      if(checkFor500(half(0)) || checkFor500(half(1))){
-        val half2 = List(jsonResultBackendAws(start, end/3), jsonResultBackendAws(end/3, (end/1.5).toInt), jsonResultBackendAws((end/1.5).toInt, end))
-        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
-          List("")
-        } else {
-          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
-        }
-      } else {
-        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
-      }
-    } else {
-      val results = parseJsonFromRequest(result(0))
-      results
+//  def resultsBackEndVerificationAws(start:Int, end:Int) : List[String] ={
+//    val result = List(jsonResultBackendAws(start, end)) // 24 Hours
+//    if(checkFor500(result(0))){
+//      val half = List(jsonResultBackendAws(start, end/2), jsonResultBackendAws((end/2), end))
+//      if(checkFor500(half(0)) || checkFor500(half(1))){
+//        val half2 = List(jsonResultBackendAws(start, end/3), jsonResultBackendAws(end/3, (end/1.5).toInt), jsonResultBackendAws((end/1.5).toInt, end))
+//        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
+//          val half3 = List(jsonResultBackendAws(start, end/4), jsonResultBackendAws(end/4, (end/4)*2), jsonResultBackendAws((end/4)*2, (end/4)*3), jsonResultBackendAws((end/4)*3, (end)))
+//          parseJsonFromRequest(half3(0)).++( parseJsonFromRequest(half3(1))).++( parseJsonFromRequest(half3(2))).++( parseJsonFromRequest(half3(3)))
+//        } else {
+//          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
+//        }
+//      } else {
+//        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
+//      }
+//    } else {
+//      val results = parseJsonFromRequest(result(0))
+//      results
+//    }
+//  }
+
+
+  def getBackendAws(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], threshold:Int): List[String] = {
+
+    val res = jsonResultBackendAws(start, end)
+    if (numElements(res) <= threshold) elements(res) else {
+
+      val middle = (end-start)/2 + (end-start)%2
+
+      getBackendAws( start, middle, numElements, elements, threshold) ::: getBackendAws( middle, end, numElements, elements, threshold)
+
     }
   }
+
+  def getBackendSkyscape(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], threshold:Int): List[String] = {
+
+    val res = jsonResultBackendAws(start, end)
+    if (numElements(res) <= threshold) elements(res) else {
+
+      val middle = (end-start)/2 + (end-start)%2
+
+      getBackendSkyscape(start, middle, numElements, elements, threshold) ::: getBackendSkyscape( middle, end, numElements, elements, threshold)
+
+    }
+  }
+
+  def getFrontendAws(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], threshold:Int): List[String] = {
+
+    val res = jsonResultFrontendAws(start, end)
+    if (numElements(res) <= threshold) elements(res) else {
+
+      val middle = (end-start)/2 + (end-start)%2
+      println((end-start)/2)
+      println(middle)
+      println((end-start)%2)
+
+      getFrontendAws( start, middle, numElements, elements, threshold) ::: getFrontendAws( middle, end, numElements, elements, threshold)
+
+    }
+  }
+
+  def getFrontendSkyscape(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], threshold:Int): List[String] = {
+
+    val res = jsonResultBackendAws(start, end)
+    if (numElements(res) <= threshold) elements(res) else {
+
+      val middle = (end-start)/2 + (end-start)%2
+
+      getFrontendSkyscape(start, middle, numElements, elements, threshold) ::: getFrontendSkyscape(middle, end, numElements, elements, threshold)
+
+    }
+  }
+
+
+  def testFct(start: Int, end: Int) = if (end-start <= 2) List.fill(9)("") else List.fill(10)("")
+
+
 
   def findErrors(list:List[String]) = {
     val errorFree = list.filter(p => !p.startsWith("request"))
     errorFree
   }
 
-  def resultsBackEndVerificationSkyscape(start:Int, end:Int) : List[String] ={
-    val result = List(jsonResultBackendSkyscape(start, end)) // 24 Hours
-    if(checkFor500(result(0))){
-      val half = List(jsonResultBackendSkyscape(start, end/2), jsonResultBackendSkyscape((end/2).toInt, end))
-      if(checkFor500(half(0)) || checkFor500(half(1))){
-        val half2 = List(jsonResultBackendSkyscape(start, end/3), jsonResultBackendSkyscape(end/3, (end/1.5).toInt), jsonResultBackendAws((end/1.5).toInt, end))
-        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
-          List("")
-        } else {
-          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
-        }
-      } else {
-        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
-      }
-    } else {
-      val results = parseJsonFromRequest(result(0))
-      results
-    }
-  }
+//  def resultsBackEndVerificationSkyscape(start:Int, end:Int) : List[String] ={
+//    val result = List(jsonResultBackendSkyscape(start, end)) // 24 Hours
+//    if(checkFor500(result(0))){
+//      val half = List(jsonResultBackendSkyscape(start, end/2), jsonResultBackendSkyscape((end/2).toInt, end))
+//      if(checkFor500(half(0)) || checkFor500(half(1))){
+//        val half2 = List(jsonResultBackendSkyscape(start, end/3), jsonResultBackendSkyscape(end/3, (end/1.5).toInt), jsonResultBackendAws((end/1.5).toInt, end))
+//        if(checkFor500(half2(0)) || checkFor500(half2(1)) || checkFor500(half2(2))) {
+//          val half3 = List(jsonResultBackendSkyscape(start, end/4), jsonResultBackendSkyscape(end/4, (end/4)*2), jsonResultBackendSkyscape((end/4)*2, (end/4)*3), jsonResultBackendSkyscape((end/4)*3, (end)))
+//          parseJsonFromRequest(half3(0)).++( parseJsonFromRequest(half3(1))).++( parseJsonFromRequest(half3(2))).++( parseJsonFromRequest(half3(3)))
+//        } else {
+//          parseJsonFromRequest(half2(0)).++(parseJsonFromRequest(half2(1))).++(parseJsonFromRequest(half2(2)))
+//        }
+//      } else {
+//        parseJsonFromRequest(half(0)).++(parseJsonFromRequest(half(1)))
+//      }
+//    } else {
+//      val results = parseJsonFromRequest(result(0))
+//      results
+//    }
+//  }
 
   private def parseJsonFromRequest(json:JsValue) = {
     val list = json \ "hits" \ "hits"
@@ -199,10 +272,10 @@ class WriteInteraction {
     resultList
   }
 
-  private def checkFor500(json:JsValue): Boolean =  {
+  private def checkFor500(json:JsValue): Int =  {
     val hits = json \ "hits" \ "total"
     println(hits)
-    hits.get.as[Int] >= 500
+    hits.get.as[Int]
   }
 
   private def jsonResultFrontendAws(start:Int, end:Int) = {
