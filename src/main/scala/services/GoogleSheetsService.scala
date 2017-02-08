@@ -54,9 +54,9 @@ class GoogleSheetsService {
     service
   }
 
-  def getWorksheetByName(creds: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
+  def populateWorksheetByFileId(accessToken: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
 
-    val service = gDataApiForToken(creds, privateKey)
+    val service = gDataApiForToken(accessToken, privateKey)
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 

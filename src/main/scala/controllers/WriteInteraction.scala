@@ -52,7 +52,7 @@ class WriteInteraction {
 
     val accessToken = getAccessToken
 
-    serviceSpreadSheet.getWorksheetByName(accessToken, loadApp.fileId, privateKey, dataMap)
+    serviceSpreadSheet.populateWorksheetByFileId(accessToken, loadApp.fileId, privateKey, dataMap)
   }
 
   def getCurlResults: Map[String, List[String]] = {
