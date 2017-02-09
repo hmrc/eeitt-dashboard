@@ -21,21 +21,21 @@ import scala.annotation.tailrec
 
 class test extends UnitSpec {
    def get2(start: Int, end: Int, numElements: (Int, Int) => Int, elements: (Int, Int) => List[String], threshold: Int): List[String] = {
-     @tailrec
-    val res = numElements(start, end)
 
-    if (res >= threshold) {
-      val middle = (end - start) / 2 + (end - start) % 2
+     val res = numElements(start, end)
+    if (res <= threshold) {
+      elements(start, end)
+
+    } else{
+      val middle = ((end - start) / 2 + (end - start) % 2)+start
 
       get2(start, middle, numElements, testFct, threshold) ::: get2(middle, end, numElements, testFct, threshold)
-    } else{
 
-      elements(start, end)
     }
   }
 
 
-  def testFct(start: Int, end: Int) = if (end - start <= 2) List.fill(9)("") else List.fill(501-end)("")
+  def testFct(start: Int, end: Int) = if (end - start <= 2) List.fill(9)("") else List.fill(501)("")
 
   def testFctHalf(start:Int, end: Int) = List.fill(410)("")
 
