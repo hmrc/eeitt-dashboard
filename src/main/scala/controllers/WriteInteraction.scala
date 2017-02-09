@@ -51,7 +51,25 @@ object PreconfiguredJWT {
     payload.setSubject(loadApp.userImpersonation)
     payload.setIssuedAtTimeSeconds(issueTime)
     payload.setExpirationTimeSeconds(exp)
+
     payload
+  }
+}
+
+object GoogleSetup {
+  val authService = new AuthService
+  val serviceSpreadSheet = new GoogleSheetsService
+
+  def getAccessToken: String = {
+    val signature = PreconfiguredJWT.createPreConfiguredJWT
+    authService.buildCredentialServiceAccount(signature).accessToken
+  }
+
+
+  def oauthOneTimeCode(curlResults: Map[String, List[String]]): AppendValuesResponse = {
+
+    val accessToken = getAccessToken
+    serviceSpreadSheet.populateWorksheetByFileId(accessToken, loadApp.fileId, privateKey, curlResults)
   }
 }
 
@@ -64,17 +82,8 @@ class WriteInteraction {
 
   val agents = new Agents(dataCentres("Qa"))
   val businessUser = new BusinessUser(dataCentres("Qa"))
-  val authService = new AuthService
-  val serviceSpreadSheet = new GoogleSheetsService
   val frontendVerification = new FrontEndVerification(dataCentres("Qa"))
   val backendVerification = new BackendVerification(dataCentres("Qa"))
-  
-  def oauthOneTimeCode: AppendValuesResponse = {
-
-    val dataMap = getCurlResults
-    val accessToken = getAccessToken
-    serviceSpreadSheet.populateWorksheetByFileId(accessToken, loadApp.fileId, privateKey, dataMap)
-  }
 
   def getCurlResults: Map[String, List[String]] = {
     //    val resultFrontend = resultsFrontendVerificationAws(0, 24) -> resultsFrontendVerificationSkyscape(0, 24)
@@ -84,18 +93,11 @@ class WriteInteraction {
     //    val backend: List[String] = findErrors(resultsBackEndVerificationAws(0, 24))
 
     Map(
-      "BusinessUsers" -> businessUser.resultsBuissnessQuery(0, 24),
-      "Agents" -> agents.resultsAgentQuery(0, 24),
-      "Backend" -> backendVerification.resultsBackEndVerificationAws(0, 24),
-      "Frontend" -> frontendVerification.resultsFrontendVerification(0, 24)
+      "BusinessUsers" -> businessUser.getBusinessResults,
+      "Agents" -> agents.getAgentResults,
+      "Backend" -> backendVerification.getBackendResults,
+      "Frontend" -> frontendVerification.getFrontendResults
     )
   }
-
-  def getAccessToken: String = {
-    val signature = PreconfiguredJWT.createPreConfiguredJWT
-    authService.buildCredentialServiceAccount(signature).accessToken
-  }
-
-
 
 }

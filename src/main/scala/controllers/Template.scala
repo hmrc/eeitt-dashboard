@@ -15,12 +15,11 @@
  */
 
 package controllers
-import scala.io.Source
-import models.GoogleApp
-import services.Json
 
 object Simulation extends App {
 
   val inst = new WriteInteraction
-  inst.oauthOneTimeCode
+  val curlResults = inst.getCurlResults
+
+  GoogleSetup.oauthOneTimeCode(curlResults)
 }

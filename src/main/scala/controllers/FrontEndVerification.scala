@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
 import scala.sys.process.Process
@@ -6,25 +22,16 @@ import scala.sys.process.Process
   * Created by harrison on 08/02/17.
   */
 class FrontEndVerification(dataCentre: String) {
-    def resultsFrontendVerification(start: Int, end: Int): List[String] = {
-      val result = List(jsonResultFrontend(start, end))
-      if (checkFor500(result.head)) {
-        val half = List(jsonResultFrontend(start, end / 2), jsonResultFrontend(end / 2, end))
-        if (checkFor500(half.head) || checkFor500(half.last)) {
-          List("")
-        } else {
-          parseJsonFromRequest(half.head).++(parseJsonFromRequest(half.last))
-        }
-      } else {
-        parseJsonFromRequest(result.head)
-      }
-    }
 
-    private def jsonResultFrontend(start: Int, end: Int) = {
-      play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
-    }
+  def getFrontendResults: List[String] = {
+    get2(0, 24, checkFor500, parseJsonFromRequest, resultsFrontendVerification)
+  }
 
-  def test(a : Int, b: Int): Unit ={
+  def resultsFrontendVerification(start: Int, end: Int) = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
+  }
+
+  def test(a: Int, b: Int): Unit = {
 
   }
 }
