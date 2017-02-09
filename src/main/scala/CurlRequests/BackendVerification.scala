@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package CurlRequests
 
 import play.api.libs.json.JsValue
 
@@ -26,7 +26,7 @@ import scala.sys.process.Process
 class BackendVerification(dataCentre: String){
 
   def getBackendResults : List[String]= {
-    get2(0, 24, checkFor500, parseJsonFromRequest, resultsBackendVerification)
+    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsBackendVerification))
   }
 
   def resultsBackendVerification(start: Int, end: Int) : JsValue = {

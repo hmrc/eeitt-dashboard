@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package controllers
+package models
 
-object Simulation extends App {
-
-  val inst = new WriteInteraction
-  val curlResults = inst.getCurlResults
-
-  GoogleSetup.oauthOneTimeCode(curlResults)
-}
+case class Env(value:String)
+object QA extends Env("Qa")
+object DataCentre extends Env("DataCentre")
+object SkyScape extends Env("SkyScape")

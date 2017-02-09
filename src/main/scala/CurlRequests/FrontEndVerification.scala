@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
-
-import play.api.libs.json.JsValue
+package CurlRequests
 
 import scala.sys.process.Process
 
 /**
   * Created by harrison on 08/02/17.
   */
-class BusinessUser(dataCentre: String) {
+class FrontEndVerification(dataCentre: String) {
 
-  def getBusinessResults : List[String]= {
-    get2(0, 24, checkFor500, parseJsonFromRequest, resultsBuissnessQuery)
+  def getFrontendResults: List[String] = {
+    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsFrontendVerification))
   }
 
-  def resultsBuissnessQuery(start: Int, end: Int): JsValue= {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCentre}") !!)
-    //    val resultSkyscape = Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCenters("Skyscape")}") !!)
-//    parseJsonFromRequest(resultAws)
+  def resultsFrontendVerification(start: Int, end: Int) = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
   }
 
-  def test(a : Int, b: Int): Unit ={
+  def test(a: Int, b: Int): Unit = {
 
   }
 }

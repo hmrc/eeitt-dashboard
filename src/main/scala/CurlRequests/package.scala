@@ -23,9 +23,10 @@ import uk.gov.hmrc.secure.AsymmetricDecrypter
 /**
   * Created by harrison on 08/02/17.
   */
-package object controllers {
-  val key: String = loadApp.privateKey
+package object CurlRequests {
+
   lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
+  val key: String = loadApp.privateKey
   val privateKey: PrivateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
 
   def get2(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => JsValue): List[String] = {
@@ -65,7 +66,9 @@ package object controllers {
     errorFree
   }
 
-  def compareDataCentreResults(first: List[String], second: List[String]): Boolean = {
-    first.size == second.size
+  def compareDataCentreResults(first: Map[String, List[String]], second: Map[String, List[String]]): Boolean = {
+    val firstList : List[Int] = first.values.map(x => x.size).toList
+    val secondList : List[Int] = second.values.map(y => y.size).toList
+    firstList.sum == secondList.sum
   }
 }
