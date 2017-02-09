@@ -43,15 +43,13 @@ package object CurlRequests {
     }
   }
 
-  def parseJsonFromRequest(json: JsValue) = {
+  def parseJsonFromRequest(json: JsValue) : List[String] = {
     val list = json \ "hits" \ "hits"
 
     list.as[List[JsObject]].map { x =>
-      (x \ "_source" \ "log").validate[String].map {
-        case y =>
+      (x \ "_source" \ "log").validate[String].map { y =>
           val some = play.api.libs.json.Json.parse(y).as[JsonClass]
           some.message
-        case _ => ""
       }.get
     }
   }
