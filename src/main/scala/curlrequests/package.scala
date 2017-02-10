@@ -16,14 +16,15 @@
 
 import java.security.PrivateKey
 
-import models.{GoogleApp, JsonClass}
-import play.api.libs.json.{JsObject, JsValue}
+import models.{GoogleApp, logLineContents$}
+import play.api.Logger
+import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import uk.gov.hmrc.secure.AsymmetricDecrypter
 
 /**
   * Created by harrison on 08/02/17.
   */
-package object CurlRequests {
+package object curlrequests {
 
   lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
   val key: String = loadApp.privateKey
@@ -46,12 +47,18 @@ package object CurlRequests {
   def parseJsonFromRequest(json: JsValue) : List[String] = {
     val list = json \ "hits" \ "hits"
 
-    list.as[List[JsObject]].map { x =>
-      (x \ "_source" \ "log").validate[String].map { y =>
-          val some = play.api.libs.json.Json.parse(y).as[JsonClass]
-          some.message
-      }.get
-    }
+    list.validate[List[JsObject]].map {
+      case x =>
+        x.map( b =>
+          ( b \ "_source" \ "log").validate[String].map { y =>
+            val some = play.api.libs.json.Json.parse(y).as[logLineContents]
+            some.message
+          }.get
+            )
+      case _ =>
+        Logger.logger.error("failed")
+        List("")
+    }.get
   }
 
   def checkFor500(json: JsValue): Int = {

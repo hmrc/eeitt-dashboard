@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package GoogleAPI
+package googleapi
 
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import services.{AuthService, GoogleSheetsService}
@@ -34,6 +34,6 @@ object GoogleSetup {
   def oauthOneTimeCode(curlResults: Map[String, List[String]]): AppendValuesResponse = {
 
     val accessToken = getAccessToken
-    serviceSpreadSheet.populateWorksheetByFileId(accessToken, CurlRequests.loadApp.fileId, CurlRequests.privateKey, curlResults)
+    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, curlrequests.privateKey, curlResults)
   }
 }

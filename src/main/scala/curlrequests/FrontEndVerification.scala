@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package CurlRequests
-
-import play.api.libs.json.JsValue
+package curlrequests
 
 import scala.sys.process.Process
 
 /**
   * Created by harrison on 08/02/17.
   */
-class Agents (dataCentre: String){
+class FrontEndVerification(dataCentre: String) {
 
-  def getAgentResults : List[String]= {
-    get2(0, 24, checkFor500, parseJsonFromRequest, resultsAgentQuery)
+  def getFrontendResults: List[String] = {
+    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsFrontendVerification))
   }
 
-  def resultsAgentQuery(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCentre}") !!)
+  def resultsFrontendVerification(start: Int, end: Int) = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
   }
 
-  def test(a : Int, b: Int): Unit ={
+  def test(a: Int, b: Int): Unit = {
 
   }
 }

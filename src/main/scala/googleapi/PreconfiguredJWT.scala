@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package GoogleAPI
+package googleapi
 
 import java.time.Instant
 
@@ -28,7 +28,7 @@ object PreconfiguredJWT {
 
   def createPreConfiguredJWT: String = {
     val jsonFactory = new JacksonFactory
-    JsonWebSignature.signUsingRsaSha256(CurlRequests.privateKey, jsonFactory, header, payloadForSheets)
+    JsonWebSignature.signUsingRsaSha256(curlrequests.privateKey, jsonFactory, header, payloadForSheets)
   }
 
   private def header: JsonWebSignature.Header = {
@@ -44,9 +44,9 @@ object PreconfiguredJWT {
 
     val payload = new JsonWebToken.Payload
     payload.set("scope", "https://spreadsheets.google.com/feeds/spreadsheets https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive")
-    payload.setIssuer(CurlRequests.loadApp.clientEmail)
+    payload.setIssuer(curlrequests.loadApp.clientEmail)
     payload.setAudience("https://www.googleapis.com/oauth2/v4/token")
-    payload.setSubject(CurlRequests.loadApp.userImpersonation)
+    payload.setSubject(curlrequests.loadApp.userImpersonation)
     payload.setIssuedAtTimeSeconds(issueTime)
     payload.setExpirationTimeSeconds(exp)
 

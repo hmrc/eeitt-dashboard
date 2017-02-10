@@ -19,15 +19,15 @@ package models
 import play.api.libs.json.Json
 
 
-case class JsonClass(app: String,
-                     hostname: String,
-                     timestamp: String,
-                     message: String,
-                     logger: String,
-                     thread: String,
-                     level: String
+case class logLineContents(app: String,
+                           hostname: String,
+                           timestamp: String,
+                           message: String,
+                           logger: String,
+                           thread: String,
+                           level: String
                     )
 
-object JsonClass {
-  implicit val format = Json.format[JsonClass]
+object logLineContents {
+  implicit val format = Json.format[logLineContents]
 }

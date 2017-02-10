@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package CurlRequests
+package curlrequests
 
 import play.api.libs.json.JsValue
 

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package Main
+package main
 
-import CurlRequests.CurlByDatabase
-import GoogleAPI.GoogleSetup
+import curlrequests.CurlByDatabase
+import googleapi.GoogleSetup
 import models.{DataCentre, QA, SkyScape}
 
 object Main extends App {
@@ -30,7 +30,7 @@ object Main extends App {
   val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
   val curlResultsDataCentre = dataCentre.getCurlResults
 
-  if(CurlRequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
+  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
     GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
   } else {
     println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
