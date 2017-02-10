@@ -24,6 +24,8 @@ object Main extends App {
   val inst = new CurlByDatabase(QA) //QA - Qa database
   val curlResults = inst.getCurlResults
 
+//  curlResults.values.map(list => list.map(f => f.isEmpty))
+
 //  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
 //  val curlResultsSkyScape = skyscape.getCurlResults
 //
