@@ -19,7 +19,7 @@ package models
 import play.api.libs.json.Json
 
 
-case class logLineContents(app: String,
+case class LogLineContents(app: String,
                            hostname: String,
                            timestamp: String,
                            message: String,
@@ -28,6 +28,6 @@ case class logLineContents(app: String,
                            level: String
                     )
 
-object logLineContents {
-  implicit val format = Json.format[logLineContents]
+object LogLineContents {
+  implicit val format = Json.format[LogLineContents]
 }

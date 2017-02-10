@@ -16,7 +16,7 @@
 
 import java.security.PrivateKey
 
-import models.{GoogleApp, logLineContents}
+import models.{GoogleApp, LogLineContents}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import uk.gov.hmrc.secure.AsymmetricDecrypter
@@ -47,18 +47,22 @@ package object curlrequests {
   def parseJsonFromRequest(json: JsValue) : List[String] = {
     val list = json \ "hits" \ "hits"
 
-    list.validate[List[JsObject]].map {
-      case x =>
-        x.map( b =>
-          ( b \ "_source" \ "log").validate[String].map { y =>
-            val some = play.api.libs.json.Json.parse(y).as[logLineContents]
-            some.message
-          }.get
-            )
-      case _ =>
-        Logger.logger.error("failed")
-        List("")
-    }.get
+    list.validate[List[JsObject]] match {
+      case JsSuccess(x, _) =>
+        x.map { b =>
+          (b \ "_source" \ "log").validate[String] match {
+            case JsSuccess(y, _) =>
+              val some = play.api.libs.json.Json.parse(y).as[LogLineContents]
+              some.message
+            case JsError(err) =>
+              Logger.logger.error(err.toString)
+              ""
+          }
+        }
+        case JsError(err) =>
+          Logger.logger.error(err.toString)
+          List("")
+      }
   }
 
   def checkFor500(json: JsValue): Int = {
