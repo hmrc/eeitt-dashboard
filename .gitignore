@@ -42,7 +42,3 @@ target
 
 .cache
 .target
-project/project/
-src/main/resources/
-src/test/test-2.11/
-src/test/test/
