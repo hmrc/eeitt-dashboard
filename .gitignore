@@ -35,7 +35,7 @@ target
 .settings
 .classpath
 .sass-cache
-*.json
+serviceAccount.json
 .ensime*
 
 **/codekit-config.json
