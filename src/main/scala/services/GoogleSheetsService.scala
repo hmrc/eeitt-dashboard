@@ -24,13 +24,14 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.ValueRange
+import models.GoogleApp
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
 import scalaz.Scalaz._
 
 class GoogleSheetsService {
-
+  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
   def gDataApiForToken(accessToken: String, privatekey : PrivateKey):Sheets = {
 
     val httpTransport = new NetHttpTransport
@@ -39,9 +40,9 @@ class GoogleSheetsService {
     val credential = new GoogleCredential.Builder()
       .setJsonFactory(jsonFactory)
       .setTransport(httpTransport)
-      .setServiceAccountId("test-57@usagereportingautomation.iam.gserviceaccount.com")
+      .setServiceAccountId(loadApp.clientEmail)
       .setServiceAccountPrivateKey(privatekey)
-        .setServiceAccountUser("daniel.connelly@digital.hmrc.gov.uk")
+        .setServiceAccountUser(loadApp.userImpersonation)
       .setServiceAccountScopes(Seq("https://spreadsheets.google.com/feeds/spreadsheets/", "https://www.googleapis.com/auth/spreadsheets").asJava)
       .build()
     credential.setAccessToken(accessToken)
@@ -53,9 +54,9 @@ class GoogleSheetsService {
     service
   }
 
-  def getWorksheetByName(creds: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
+  def populateWorksheetByFileId(accessToken: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
 
-    val service = gDataApiForToken(creds, privateKey)
+    val service = gDataApiForToken(accessToken, privateKey)
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
@@ -63,7 +64,7 @@ class GoogleSheetsService {
     val totalBuissnessUsers : Int = info.values.sum
     val numOfAgents : Int = data("Agents").size
     val date :LocalDate = LocalDate.now.minus(Period.ofDays(1))
-    println(date)
+
     val values : java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
         stringToAnyRef(date.toString),

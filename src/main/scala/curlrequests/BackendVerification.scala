@@ -14,10 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package curlrequests
 
-case class RefreshTokenResponse(
-                                 accessToken: String,
-                                 expiresIn: Int,
-                                 tokenType: String
-                               )
+import play.api.libs.json.JsValue
+
+import scala.sys.process.Process
+
+/**
+  * Created by harrison on 08/02/17.
+  */
+class BackendVerification(dataCentre: String){
+
+  def getBackendResults : List[String]= {
+    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsBackendVerification))
+  }
+
+  def resultsBackendVerification(start: Int, end: Int) : JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end ${dataCentre}") !!)
+  }
+
+  def test(a : Int, b: Int): Unit ={
+
+  }
+}

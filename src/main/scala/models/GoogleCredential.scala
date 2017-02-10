@@ -16,13 +16,6 @@
 
 package models
 
-case class GoogleCredentialSA(
-                             accessToken: String
-                           )
-
-case class GoogleCredentialC(
-                              id: Option[Long],
-                              userId: Long,
-                              accessToken: String,
-                              refreshToken: String
-                            )
+case class GoogleCredential(
+                               accessToken: String
+                             )

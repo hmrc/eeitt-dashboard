@@ -15,23 +15,21 @@
  */
 
 package services
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.netaporter.uri.dsl._
 import models._
-
 import scalaj.http.{HttpResponse, _}
+
 
 class AuthService {
 
-  def buildCredentialServiceAccount(string: String):TokenResponseSA = {
+  //Made recursive because of a false flag error, if we change the project then we will have to manually allow a user to collect the tokens
+  def buildCredentialServiceAccount(string: String): TokenResponse = {
     val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
       "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
       "assertion" -> string
     )).asString
 
     response.code match {
-      case 200 => Json.fromJson[TokenResponseSA](response.body, true)
+      case 200 => Json.fromJson[TokenResponse](response.body, true)
       case 401 => buildCredentialServiceAccount(string)
       case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
     }
