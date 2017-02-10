@@ -56,12 +56,12 @@ package object curlrequests {
               some.message
             case JsError(err) =>
               Logger.logger.error(err.toString)
-              ""
+              throw new IllegalArgumentException("no strings inside the individual logs meaning pulling wrong data out of kibana")
           }
         }
         case JsError(err) =>
           Logger.logger.error(err.toString)
-          List("")
+          throw new IllegalArgumentException("No hits inside the logs returned, perhaps date/times are wrong")
       }
   }
 
