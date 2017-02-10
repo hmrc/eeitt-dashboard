@@ -21,19 +21,21 @@ import googleapi.GoogleSetup
 import models.{DataCentre, QA, SkyScape}
 
 object Main extends App {
-//  val inst = new CurlByDatabase(QA) //QA - Qa database
-//  val curlResults = inst.getCurlResults
+  val inst = new CurlByDatabase(QA) //QA - Qa database
+  val curlResults = inst.getCurlResults
 
-  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  val curlResultsSkyScape = skyscape.getCurlResults
+//  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
+//  val curlResultsSkyScape = skyscape.getCurlResults
+//
+//  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
+//  val curlResultsDataCentre = dataCentre.getCurlResults
+//
+//  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
+//    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
+//  } else {
+//    println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+//  }
 
-  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getCurlResults
-
-  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
-  } else {
-    println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
-  }
+  GoogleSetup.oauthOneTimeCode(curlResults)
 
 }

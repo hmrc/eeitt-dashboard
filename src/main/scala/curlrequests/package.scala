@@ -16,7 +16,7 @@
 
 import java.security.PrivateKey
 
-import models.{GoogleApp, logLineContents$}
+import models.{GoogleApp, logLineContents}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import uk.gov.hmrc.secure.AsymmetricDecrypter
