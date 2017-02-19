@@ -31,6 +31,10 @@ object GoogleSetup {
     authService.buildCredentialServiceAccount(signature).accessToken
   }
 
+  def printCurlResults(curlResults : Map[String, List[String]]) = {
+    serviceSpreadSheet.print(curlResults)
+  }
+
   def oauthOneTimeCode(curlResults: Map[String, List[String]]): AppendValuesResponse = {
 
     val accessToken = getAccessToken

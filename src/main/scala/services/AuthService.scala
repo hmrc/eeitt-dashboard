@@ -30,7 +30,7 @@ class AuthService {
 
     response.code match {
       case 200 => Json.fromJson[TokenResponse](response.body, true)
-      case 401 => buildCredentialServiceAccount(string)
+//      case 401 => buildCredentialServiceAccount(string)
       case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
     }
   }
