@@ -25,6 +25,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.ValueRange
 import models.GoogleApp
+import play.api.libs.json.JsObject
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
@@ -54,7 +55,7 @@ class GoogleSheetsService {
     service
   }
 
-  def print(data : Map[String, List[String]]) = {
+  def print(data : Map[String, List[String]], num : Map[String, List[JsObject]]) = {
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
@@ -65,13 +66,13 @@ class GoogleSheetsService {
     println("DATE: - "+stringToAnyRef(date.toString))
     println("BUSINESSUSERS: - "+intToAnyRef(totalBuissnessUsers))
     println("AGENTS: - "+intToAnyRef(numOfAgents))
-    println("AL: - "+intToAnyRef(info("'AL'")))
-    println("AP: - "+intToAnyRef(info("'AP'")))
-    println("BD: - "+intToAnyRef(info("'BD'")))
-    println("GD: - "+intToAnyRef(info("'GD'")))
-    println("IP: - "+intToAnyRef(info("'IP'")))
-    println("LD: - "+intToAnyRef(info("'LD'")))
-    println("LF: - "+intToAnyRef(info("'LF'")))
+    println("AL: - "+intToAnyRef(info("'AL'"))+"Succeded : - "+num("AggregatesLevy").size)
+    println("AP: - "+intToAnyRef(info("'AP'"))+"Succeded : - "+num("AirPassengerDuty").size)
+    println("BD: - "+intToAnyRef(info("'BD'"))+"Succeded : - "+num("BingoDuty").size)
+    println("GD: - "+intToAnyRef(info("'GD'"))+"Succeded : - "+num("GamingDuty").size)
+    println("IP: - "+intToAnyRef(info("'IP'"))+"Succeded : - "+num("InsurancePremiumTax").size)
+    println("LD: - "+intToAnyRef(info("'LD'"))+"Succeded : - "+num("LotteryDuty").size)
+    println("LF: - "+intToAnyRef(info("'LF'"))+"Succeded : - "+num("LandFill").size)
     println("FRONTEND: - "+intToAnyRef(data("Frontend").size))
     println("BACKEND: - "+intToAnyRef(data("Backend").size))
     println("UNIQUEUSERS: - "+intToAnyRef(uniqueUsers))

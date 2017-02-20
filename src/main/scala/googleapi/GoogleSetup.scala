@@ -17,6 +17,7 @@
 package googleapi
 
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
+import play.api.libs.json.JsObject
 import services.{AuthService, GoogleSheetsService}
 
 /**
@@ -31,8 +32,8 @@ object GoogleSetup {
     authService.buildCredentialServiceAccount(signature).accessToken
   }
 
-  def printCurlResults(curlResults : Map[String, List[String]]) = {
-    serviceSpreadSheet.print(curlResults)
+  def printCurlResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
+    serviceSpreadSheet.print(curlResults,successResults)
   }
 
   def oauthOneTimeCode(curlResults: Map[String, List[String]]): AppendValuesResponse = {
