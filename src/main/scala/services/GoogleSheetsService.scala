@@ -54,6 +54,29 @@ class GoogleSheetsService {
     service
   }
 
+  def print(data : Map[String, List[String]]) = {
+
+    val uniqueUsers = parseVerificationJsonData(data("Backend"))
+
+    val info = parseJsonData(data("BusinessUsers"))
+    val totalBuissnessUsers : Int = info.values.sum
+    val numOfAgents : Int = data("Agents").size
+    val date :LocalDate = LocalDate.now.minus(Period.ofDays(1))
+    println("DATE: - "+stringToAnyRef(date.toString))
+    println("BUSINESSUSERS: - "+intToAnyRef(totalBuissnessUsers))
+    println("AGENTS: - "+intToAnyRef(numOfAgents))
+    println("AL: - "+intToAnyRef(info("'AL'")))
+    println("AP: - "+intToAnyRef(info("'AP'")))
+    println("BD: - "+intToAnyRef(info("'BD'")))
+    println("GD: - "+intToAnyRef(info("'GD'")))
+    println("IP: - "+intToAnyRef(info("'IP'")))
+    println("LD: - "+intToAnyRef(info("'LD'")))
+    println("LF: - "+intToAnyRef(info("'LF'")))
+    println("FRONTEND: - "+intToAnyRef(data("Frontend").size))
+    println("BACKEND: - "+intToAnyRef(data("Backend").size))
+    println("UNIQUEUSERS: - "+intToAnyRef(uniqueUsers))
+  }
+
   def populateWorksheetByFileId(accessToken: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
 
     val service = gDataApiForToken(accessToken, privateKey)
