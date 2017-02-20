@@ -16,23 +16,25 @@
 
 package services
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.netaporter.uri.dsl._
 import models._
-
 import scalaj.http.{HttpResponse, _}
+
 
 class AuthService {
 
-  def buildCredentialServiceAccount(string: String):TokenResponseSA = {
+  def buildCredentialServiceAccount(string: String): TokenResponse = {
+    _buildCredentialServiceAccount(string, 0)
+  }
+
+  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
     val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
       "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
       "assertion" -> string
     )).asString
 
-    response.code match {
-      case 200 => Json.fromJson[TokenResponseSA](response.body, true)
-      case 401 => buildCredentialServiceAccount(string)
+    (response.code, numRetry) match {
+      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
+      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
       case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
     }
   }

@@ -15,12 +15,12 @@
  */
 
 import sbt.Keys._
-import sbt.{Build, _}
+import sbt._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 object HmrcBuild extends Build {
-
+import BuildDependenices._
   val appName = "eeitt-dashboard"
 
   val appDependencies = Seq(
@@ -41,13 +41,13 @@ object HmrcBuild extends Build {
     "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.8.4",
     "com.netaporter" % "scala-uri_2.11" % "0.4.16",
     "org.scalaj" %% "scalaj-http" % "2.3.0",
-    "uk.gov.hmrc" %% "hmrctest" % "2.2.0" % "test",
-    "org.scalatest" %% "scalatest" % "2.2.6" % "test",
-    "org.pegdown" % "pegdown" % "1.6.0" % "test",
     "org.jsoup" % "jsoup" % "1.8.1" % "test",
     //    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
 //    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test"
+    Test.scalaTest,
+    Test.pegdown,
+    Test.hmrcTest,
+    Test.scalaTestPlus
   )
 
   lazy val library = Project(appName, file("."))
@@ -72,3 +72,23 @@ object Dependencies {
 
   }
 }
+
+private object BuildDependenices{
+  private val hmrcTestVersion = "2.2.0"
+  object Compile {
+  }
+
+  sealed abstract class Test(scope: String) {
+     val hmrcTest = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope
+    val scalaTest = "org.scalatest" %% "scalatest" % "2.2.4" % scope
+    val pegdown = "org.pegdown" % "pegdown" % "1.5.0" % scope
+    val scalaTestPlus = "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % scope
+
+  }
+  object Test extends Test("test")
+
+
+  }
+
+
+

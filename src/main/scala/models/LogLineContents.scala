@@ -16,16 +16,18 @@
 
 package models
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.Json
 
-case class GoogleApp(
-                      privateKey: String,
-                      clientEmail: String,
-                      fileId: String,
-                      userImpersonation: String
 
+case class LogLineContents(app: String,
+                           hostname: String,
+                           timestamp: String,
+                           message: String,
+                           logger: String,
+                           thread: String,
+                           level: String
                     )
 
-object GoogleApp {
-  implicit val format: Reads[GoogleApp] = Json.reads[GoogleApp]
+object LogLineContents {
+  implicit val format = Json.format[LogLineContents]
 }

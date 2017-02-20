@@ -16,16 +16,12 @@
 
 package models
 
-import play.api.libs.json.{Json, Reads}
+case class Form(value: String)
 
-case class GoogleApp(
-                      privateKey: String,
-                      clientEmail: String,
-                      fileId: String,
-                      userImpersonation: String
-
-                    )
-
-object GoogleApp {
-  implicit val format: Reads[GoogleApp] = Json.reads[GoogleApp]
-}
+object LotteryDuty extends Form("promoters-monthly-lottery-duty-return")
+object BingoDuty extends Form("bingo-duty-promoters-monthly-return")
+object LandFill extends Form("landfill-tax-return")
+object AggregateLevy extends Form("aggregates-levy-return")
+object GamingDuty extends Form("gaming-duty-payment-on-account")
+object AirPassengerDuty extends Form("air-passenger-duty-return")
+object InsurancePremiumTax extends Form("insurance-premium-tax-return")

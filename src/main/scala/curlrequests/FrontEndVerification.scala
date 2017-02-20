@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package models
+package curlrequests
 
-import play.api.libs.json.{Json, Reads}
+import scala.sys.process.Process
 
-case class GoogleApp(
-                      privateKey: String,
-                      clientEmail: String,
-                      fileId: String,
-                      userImpersonation: String
+/**
+  * Created by harrison on 08/02/17.
+  */
+class FrontEndVerification(dataCentre: String) {
 
-                    )
+  def getFrontendResults: List[String] = {
+    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsFrontendVerification))
+  }
 
-object GoogleApp {
-  implicit val format: Reads[GoogleApp] = Json.reads[GoogleApp]
+  def resultsFrontendVerification(start: Int, end: Int) = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
+  }
+
+  def test(a: Int, b: Int): Unit = {
+
+  }
 }

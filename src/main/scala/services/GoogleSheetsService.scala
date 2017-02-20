@@ -24,14 +24,17 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.ValueRange
+import models.GoogleApp
+import play.api.libs.json.JsObject
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
 import scalaz.Scalaz._
 
 class GoogleSheetsService {
+  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
-  def gDataApiForToken(accessToken: String, privatekey : PrivateKey):Sheets = {
+  def gDataApiForToken(accessToken: String, privatekey: PrivateKey): Sheets = {
 
     val httpTransport = new NetHttpTransport
     val jsonFactory = new JacksonFactory
@@ -39,32 +42,55 @@ class GoogleSheetsService {
     val credential = new GoogleCredential.Builder()
       .setJsonFactory(jsonFactory)
       .setTransport(httpTransport)
-      .setServiceAccountId("test-57@usagereportingautomation.iam.gserviceaccount.com")
+      .setServiceAccountId(loadApp.clientEmail)
       .setServiceAccountPrivateKey(privatekey)
-        .setServiceAccountUser("daniel.connelly@digital.hmrc.gov.uk")
+      .setServiceAccountUser(loadApp.userImpersonation)
       .setServiceAccountScopes(Seq("https://spreadsheets.google.com/feeds/spreadsheets/", "https://www.googleapis.com/auth/spreadsheets").asJava)
       .build()
     credential.setAccessToken(accessToken)
 
-    val service = new Sheets.Builder(httpTransport,jsonFactory, credential)
+    val service = new Sheets.Builder(httpTransport, jsonFactory, credential)
       .setApplicationName("test")
       .build()
 
     service
   }
 
-  def getWorksheetByName(creds: String, fileId: String, privateKey: PrivateKey, data : Map[String, List[String]]) = {
-
-    val service = gDataApiForToken(creds, privateKey)
+  def print(data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
     val info = parseJsonData(data("BusinessUsers"))
-    val totalBuissnessUsers : Int = info.values.sum
-    val numOfAgents : Int = data("Agents").size
-    val date :LocalDate = LocalDate.now.minus(Period.ofDays(1))
-    println(date)
-    val values : java.util.List[java.util.List[AnyRef]] = Seq(
+    val totalBuissnessUsers: Int = info.values.sum
+    val numOfAgents: Int = data("Agents").size
+    val date: LocalDate = LocalDate.now.minus(Period.ofDays(1))
+    println("DATE: - " + stringToAnyRef(date.toString))
+    println("BUSINESSUSERS: - " + intToAnyRef(totalBuissnessUsers))
+    println("AGENTS: - " + intToAnyRef(numOfAgents))
+    println("AL: - " + intToAnyRef(info("'AL'")) + "Succeded : - " + num("AggregatesLevy").size)
+    println("AP: - " + intToAnyRef(info("'AP'")) + "Succeded : - " + num("AirPassengerDuty").size)
+    println("BD: - " + intToAnyRef(info("'BD'")) + "Succeded : - " + num("BingoDuty").size)
+    println("GD: - " + intToAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDuty").size)
+    println("IP: - " + intToAnyRef(info("'IP'")) + "Succeded : - " + num("InsurancePremiumTax").size)
+    println("LD: - " + intToAnyRef(info("'LD'")) + "Succeded : - " + num("LotteryDuty").size)
+    println("LF: - " + intToAnyRef(info("'LF'")) + "Succeded : - " + num("LandFill").size)
+    println("FRONTEND: - " + intToAnyRef(data("Frontend").size))
+    println("BACKEND: - " + intToAnyRef(data("Backend").size))
+    println("UNIQUEUSERS: - " + intToAnyRef(uniqueUsers))
+  }
+
+  def populateWorksheetByFileId(accessToken: String, fileId: String, privateKey: PrivateKey, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
+
+    val service = gDataApiForToken(accessToken, privateKey)
+
+    val uniqueUsers = parseVerificationJsonData(data("Backend"))
+
+    val info = parseJsonData(data("BusinessUsers"))
+    val totalBuissnessUsers: Int = info.values.sum
+    val numOfAgents: Int = data("Agents").size
+    val date: LocalDate = LocalDate.now.minus(Period.ofDays(1))
+
+    val values: java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
         stringToAnyRef(date.toString),
         intToAnyRef(totalBuissnessUsers),
@@ -78,13 +104,20 @@ class GoogleSheetsService {
         intToAnyRef(info("'LF'")),
         intToAnyRef(data("Frontend").size),
         intToAnyRef(data("Backend").size),
-        intToAnyRef(uniqueUsers)
+        intToAnyRef(uniqueUsers),
+        intToAnyRef(num("AggregatesLevy").size),
+        intToAnyRef(num("AirPassengerDuty").size),
+        intToAnyRef(num("BingoDuty").size),
+        intToAnyRef(num("GamingDuty").size),
+        intToAnyRef(num("InsurancePremiumTax").size),
+        intToAnyRef(num("LotteryDuty").size),
+        intToAnyRef(num("LandFill").size)
       ).asJava
     ).asJava
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
     valuerange.setValues(values)
-    val spreadsheet = service.spreadsheets().values().append(fileId,"A1:E1", valuerange).setValueInputOption("RAW").execute()//metafeedUrl, classOf[SpreadsheetEntry])
+    val spreadsheet = service.spreadsheets().values().append(fileId, "A1:E1", valuerange).setValueInputOption("RAW").execute() //metafeedUrl, classOf[SpreadsheetEntry])
 
     spreadsheet
   }
@@ -97,15 +130,15 @@ class GoogleSheetsService {
     string
   }
 
-  private def parseJsonData(data: List[String]) : Map[String, Int]= {
+  private def parseJsonData(data: List[String]): Map[String, Int] = {
     val groupedData = data.groupBy(o => o.split(" ")(8))
     val map = Map("'AL'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'GD'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
-    val numData : Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
+    val numData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
 
     numData |+| map
   }
 
-  private def parseVerificationJsonData(data:List[String]) : Int = {
+  private def parseVerificationJsonData(data: List[String]): Int = {
     val groupedData = data.groupBy(o => o.split("groupId")(1).split(",")(0))
     groupedData.size
   }

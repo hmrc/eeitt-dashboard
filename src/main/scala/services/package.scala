@@ -46,7 +46,7 @@ package object services {
     }
   }
 
-//  lazy val loadApp = Json.fromJson[GoogleApp](this.getClass.getClassLoader().getResource("google_secrets.json"))
+  lazy val loadApp = Json.fromJson[GoogleApp](this.getClass.getClassLoader().getResource("src/main/serviceAccount.json"))
 
   val authUrlBase = "https://accounts.google.com/o/oauth2/auth"
   val tokenUrlBase = "https://www.googleapis.com/oauth2/v4/token"

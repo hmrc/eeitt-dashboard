@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package curlrequests
 
-import play.api.libs.json.Json
+import play.api.libs.json.JsValue
 
+import scala.sys.process.Process
 
-case class JsonClass(app:String,
-                     hostname: String,
-                     timestamp: String,
-                     message:String,
-                     logger:String,
-                     thread:String,
-                     level:String
-                    )
+/**
+  * Created by harrison on 08/02/17.
+  */
+class Agents (dataCentre: String){
 
-object JsonClass {
-  implicit val format = Json.format[JsonClass]
+  def getAgentResults : List[String]= {
+    get2(0, 24, checkFor500, parseJsonFromRequest, resultsAgentQuery)
+  }
+
+  def resultsAgentQuery(start: Int, end: Int): JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCentre}") !!)
+  }
+
+  def test(a : Int, b: Int): Unit ={
+
+  }
 }

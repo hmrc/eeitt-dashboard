@@ -14,9 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package curlrequests
 
-case class User(
-                 id: Long,
-                 email: String
-               )
+import play.api.libs.json.JsValue
+
+import scala.sys.process.Process
+
+/**
+  * Created by harrison on 08/02/17.
+  */
+class BusinessUser(dataCentre: String) {
+
+  def getBusinessResults : List[String]= {
+    get2(0, 24, checkFor500, parseJsonFromRequest, resultsBuissnessQuery)
+  }
+
+  def resultsBuissnessQuery(start: Int, end: Int): JsValue= {
+    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCentre}") !!)
+  }
+
+  def test(a : Int, b: Int): Unit ={
+
+  }
+}
