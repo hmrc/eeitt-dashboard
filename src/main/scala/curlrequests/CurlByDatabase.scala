@@ -16,7 +16,8 @@
 
 package curlrequests
 
-import models.Env
+import models._
+import play.api.libs.json.JsObject
 
 class CurlByDatabase(environment: Env) {
 
@@ -30,6 +31,26 @@ class CurlByDatabase(environment: Env) {
   val businessUser = new BusinessUser(dataCentres(environment.value))
   val frontendVerification = new FrontEndVerification(dataCentres(environment.value))
   val backendVerification = new BackendVerification(dataCentres(environment.value))
+
+  val lotteryDuty = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value))
+  val gamingDuty = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value))
+  val airPassengerDuty = new SuccessfulSubmissions(AirPassengerDuty, dataCentres(environment.value))
+  val landFill = new SuccessfulSubmissions(LandFill, dataCentres(environment.value))
+  val aggregateLevy = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value))
+  val bingoDuty = new SuccessfulSubmissions(BingoDuty, dataCentres(environment.value))
+  val insurancePremiumTax = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value))
+
+  def getSuccessResults : Map[String, List[JsObject]] = {
+    Map(
+      "LotteryDuty" -> lotteryDuty.getSuccessResults,
+      "GamingDuty" -> gamingDuty.getSuccessResults,
+      "AirPassengerDuty" -> airPassengerDuty.getSuccessResults,
+      "LandFill" -> landFill.getSuccessResults,
+      "AggregatesLevy" -> aggregateLevy.getSuccessResults,
+      "BingoDuty" -> bingoDuty.getSuccessResults,
+      "InsurancePremiumTax" -> insurancePremiumTax.getSuccessResults
+    )
+  }
 
   def getCurlResults: Map[String, List[String]] = {
     Map(
