@@ -41,6 +41,9 @@ import BuildDependenices._
     "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.8.4",
     "com.netaporter" % "scala-uri_2.11" % "0.4.16",
     "org.scalaj" %% "scalaj-http" % "2.3.0",
+    "org.jsoup" % "jsoup" % "1.8.1" % "test",
+    //    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+//    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
     Test.scalaTest,
     Test.pegdown,
     Test.hmrcTest,
