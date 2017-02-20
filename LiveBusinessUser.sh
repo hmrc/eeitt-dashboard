@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DATE="$(date -d "yesterday" -Idate)"
+DATE="$(date -d "-1 days" -Idate)"
 
 STARTHOURS=$1
 

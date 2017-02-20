@@ -15,22 +15,26 @@
  */
 
 package services
+
 import models._
 import scalaj.http.{HttpResponse, _}
 
 
 class AuthService {
 
-  //Made recursive because of a false flag error, if we change the project then we will have to manually allow a user to collect the tokens
   def buildCredentialServiceAccount(string: String): TokenResponse = {
+    _buildCredentialServiceAccount(string, 0)
+  }
+
+  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
     val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
       "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
       "assertion" -> string
     )).asString
 
-    response.code match {
-      case 200 => Json.fromJson[TokenResponse](response.body, true)
-      case 401 => buildCredentialServiceAccount(string)
+    (response.code, numRetry) match {
+      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
+      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
       case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
     }
   }

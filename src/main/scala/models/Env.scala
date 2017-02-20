@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package controllers
-import scala.io.Source
-import models.GoogleApp
-import services.Json
+package models
 
-object Simulation extends App {
-
-  val inst = new WriteInteraction
-  inst.oauthOneTimeCode
-}
+case class Env(value:String)
+object QA extends Env("Qa")
+object DataCentre extends Env("DataCentre")
+object SkyScape extends Env("SkyScape")
