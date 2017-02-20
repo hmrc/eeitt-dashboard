@@ -20,9 +20,6 @@ import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import play.api.libs.json.JsObject
 import services.{AuthService, GoogleSheetsService}
 
-/**
-  * Created by daniel-connelly on 09/02/17.
-  */
 object GoogleSetup {
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
@@ -36,9 +33,9 @@ object GoogleSetup {
     serviceSpreadSheet.print(curlResults,successResults)
   }
 
-  def oauthOneTimeCode(curlResults: Map[String, List[String]]): AppendValuesResponse = {
+  def oauthOneTimeCode(curlResults: Map[String, List[String]], successResults : Map[String, List[JsObject]]): AppendValuesResponse = {
 
     val accessToken = getAccessToken
-    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, curlrequests.privateKey, curlResults)
+    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, curlrequests.privateKey, curlResults, successResults)
   }
 }
