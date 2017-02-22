@@ -22,8 +22,9 @@ case class GoogleApp(
                       privateKey: String,
                       clientEmail: String,
                       fileId: String,
-                      userImpersonation: String
-
+                      userImpersonation: String,
+                      clientId : String,
+                      clientSecrets : String
                     )
 
 object GoogleApp {

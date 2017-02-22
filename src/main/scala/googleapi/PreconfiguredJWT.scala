@@ -21,9 +21,6 @@ import java.time.Instant
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.json.webtoken.{JsonWebSignature, JsonWebToken}
 
-/**
-  * Created by daniel-connelly on 09/02/17.
-  */
 object PreconfiguredJWT {
 
   def createPreConfiguredJWT: String = {
@@ -44,7 +41,7 @@ object PreconfiguredJWT {
 
     val payload = new JsonWebToken.Payload
     payload.set("scope", "https://spreadsheets.google.com/feeds/spreadsheets https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive")
-    payload.setIssuer(curlrequests.loadApp.clientEmail)
+    payload.setIssuer("118233204770086347928")//curlrequests.loadApp.clientEmail)
     payload.setAudience("https://www.googleapis.com/oauth2/v4/token")
     payload.setSubject(curlrequests.loadApp.userImpersonation)
     payload.setIssuedAtTimeSeconds(issueTime)

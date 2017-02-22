@@ -19,6 +19,7 @@ package services
 import java.security.PrivateKey
 import java.time.{LocalDate, Period}
 
+import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -32,22 +33,12 @@ import scala.language.implicitConversions
 import scalaz.Scalaz._
 
 class GoogleSheetsService {
-  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
+//  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
-  def gDataApiForToken(accessToken: String, privatekey: PrivateKey): Sheets = {
+  def gDataApiForToken(credential: Credential, privatekey: PrivateKey): Sheets = {
 
     val httpTransport = new NetHttpTransport
     val jsonFactory = new JacksonFactory
-
-    val credential = new GoogleCredential.Builder()
-      .setJsonFactory(jsonFactory)
-      .setTransport(httpTransport)
-      .setServiceAccountId(loadApp.clientEmail)
-      .setServiceAccountPrivateKey(privatekey)
-      .setServiceAccountUser(loadApp.userImpersonation)
-      .setServiceAccountScopes(Seq("https://spreadsheets.google.com/feeds/spreadsheets/", "https://www.googleapis.com/auth/spreadsheets").asJava)
-      .build()
-    credential.setAccessToken(accessToken)
 
     val service = new Sheets.Builder(httpTransport, jsonFactory, credential)
       .setApplicationName("test")
@@ -70,7 +61,7 @@ class GoogleSheetsService {
     println("AL: - " + intToAnyRef(info("'AL'")) + "Succeded : - " + num("AggregatesLevy").size)
     println("AP: - " + intToAnyRef(info("'AP'")) + "Succeded : - " + num("AirPassengerDuty").size)
     println("BD: - " + intToAnyRef(info("'BD'")) + "Succeded : - " + num("BingoDuty").size)
-    println("GD: - " + intToAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDuty").size)
+    println("GD: - " + intToAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDutyPayment").size + "Gaming Duty Returns" + num("GamingDuty").size )
     println("IP: - " + intToAnyRef(info("'IP'")) + "Succeded : - " + num("InsurancePremiumTax").size)
     println("LD: - " + intToAnyRef(info("'LD'")) + "Succeded : - " + num("LotteryDuty").size)
     println("LF: - " + intToAnyRef(info("'LF'")) + "Succeded : - " + num("LandFill").size)
@@ -79,7 +70,7 @@ class GoogleSheetsService {
     println("UNIQUEUSERS: - " + intToAnyRef(uniqueUsers))
   }
 
-  def populateWorksheetByFileId(accessToken: String, fileId: String, privateKey: PrivateKey, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
+  def populateWorksheetByFileId(accessToken: Credential, fileId: String, privateKey: PrivateKey, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
 
     val service = gDataApiForToken(accessToken, privateKey)
 
@@ -108,10 +99,11 @@ class GoogleSheetsService {
         intToAnyRef(num("AggregatesLevy").size),
         intToAnyRef(num("AirPassengerDuty").size),
         intToAnyRef(num("BingoDuty").size),
-        intToAnyRef(num("GamingDuty").size),
+        intToAnyRef(num("GamingDutyPayment").size),
         intToAnyRef(num("InsurancePremiumTax").size),
         intToAnyRef(num("LotteryDuty").size),
-        intToAnyRef(num("LandFill").size)
+        intToAnyRef(num("LandFill").size),
+        intToAnyRef(num("GamingDuty").size)
       ).asJava
     ).asJava
     val valuerange = new ValueRange

@@ -34,6 +34,7 @@ class CurlByDatabase(environment: Env) {
 
   val lotteryDuty = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value))
   val gamingDuty = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value))
+  val gamingDutyPayment = new SuccessfulSubmissions(GamingDutyPayment, dataCentres(environment.value))
   val airPassengerDuty = new SuccessfulSubmissions(AirPassengerDuty, dataCentres(environment.value))
   val landFill = new SuccessfulSubmissions(LandFill, dataCentres(environment.value))
   val aggregateLevy = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value))
@@ -44,6 +45,7 @@ class CurlByDatabase(environment: Env) {
     Map(
       "LotteryDuty" -> lotteryDuty.getSuccessResults,
       "GamingDuty" -> gamingDuty.getSuccessResults,
+      "GamingDutyPayment" -> gamingDutyPayment.getSuccessResults,
       "AirPassengerDuty" -> airPassengerDuty.getSuccessResults,
       "LandFill" -> landFill.getSuccessResults,
       "AggregatesLevy" -> aggregateLevy.getSuccessResults,
