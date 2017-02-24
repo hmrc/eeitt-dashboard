@@ -23,11 +23,17 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
 import com.google.api.client.googleapis.auth.oauth2.{GoogleAuthorizationCodeFlow, GoogleClientSecrets, GoogleCredential}
+import com.google.api.client.googleapis.compute.ComputeCredential
+import com.google.api.client.googleapis
+import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.AppIdentityCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
-import com.google.api.services.sheets.v4.SheetsScopes
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.Permission
+import com.google.api.services.sheets.v4.{Sheets, SheetsScopes}
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import play.api.libs.json.JsObject
 import services.{AuthService, GoogleSheetsService, tokenUrlBase}
@@ -38,40 +44,15 @@ object GoogleSetup {
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
 
-  val AppName = "EEITT_LOGGING"
+//  No longer used due to more convient setup found, however could be useful in near future.
 
-  val DATA_STORE_DIR = new File("sheets.googleapis.com-java-quickstart")
+//  def getAccessToken: String = {
+//    val signature = PreconfiguredJWT.createPreConfiguredJWT
+//    authService.buildCredentialServiceAccount(signature).accessToken
+//  }
 
-
-  val JSON_FACTORY = JacksonFactory.getDefaultInstance
-  val SCOPES = SheetsScopes.all()
-
-  var HTTP_TRANSPORT: Option[HttpTransport] = None
-  var DATA_STORE_FACTORY : Option[FileDataStoreFactory] = None
-
-  try {
-    HTTP_TRANSPORT = Some(GoogleNetHttpTransport.newTrustedTransport())
-    DATA_STORE_FACTORY = Some(new FileDataStoreFactory(DATA_STORE_DIR))
-  } catch {
-    case t : Throwable =>
-      t.printStackTrace()
-      System.exit(1)
-  }
-
-  def authorise() = {
-   val in = scala.io.Source.fromFile("src/main/resources/thing.json").reader()
-    println(in)
-    val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
-    val flow = new Builder(HTTP_TRANSPORT.get, JSON_FACTORY, clientSecrets, SCOPES)
-      .setDataStoreFactory(DATA_STORE_FACTORY.get)
-      .setAccessType("offline")
-      .build()
-    new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user")
-  }
-
-  def getAccessToken: String = {
-    val signature = PreconfiguredJWT.createPreConfiguredJWT
-    authService.buildCredentialServiceAccount(signature).accessToken
+  def authorize = {
+    authService.computeAuthorise()
   }
 
   def printCurlResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
@@ -79,7 +60,7 @@ object GoogleSetup {
   }
 
   def oauthOneTimeCode(curlResults: Map[String, List[String]], successResults : Map[String, List[JsObject]]): AppendValuesResponse = {
-    val accessToken = authorise()
+    val accessToken = authService.authorise()
     serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, curlrequests.privateKey, curlResults, successResults)
   }
 }

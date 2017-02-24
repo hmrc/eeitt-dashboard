@@ -67,6 +67,7 @@ package object curlrequests {
 
   def checkFor500(json: JsValue): Int = {
     val hits = json \ "hits" \ "total"
+    println(hits)
     hits.get.as[Int]
   }
 

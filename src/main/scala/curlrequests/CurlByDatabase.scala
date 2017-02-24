@@ -16,15 +16,18 @@
 
 package curlrequests
 
+import java.time.{LocalDate, Period}
+
 import models._
 import play.api.libs.json.JsObject
 
 class CurlByDatabase(environment: Env) {
 
+  val date = LocalDate.now.minus(Period.ofDays(1)).toString.replace("-", ".")
   val dataCentres = Map(
     "Qa" -> "https://kibana-datacentred-sal01-qa.tax.service.gov.uk/elasticsearch/logstash-qa*/_search?pretty",
-    "DataCentre" -> "https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty",
-    "SkyScape" -> "https://kibana-skyscape-farnborough-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty"
+    "DataCentre" -> s"https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production-datacentred-sal01-$date/_search?pretty",
+    "SkyScape" -> s"https://kibana-skyscape-farnborough-production.tax.service.gov.uk/elasticsearch/logstash-production-skyscape-farnborough-$date/_search?pretty"
   )
 
   val agents = new Agents(dataCentres(environment.value))

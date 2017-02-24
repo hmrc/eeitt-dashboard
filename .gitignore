@@ -31,10 +31,12 @@ target
 *.classpath
 *.project
 **/*.settings
+servicedata.json
 .project
 .settings
 .classpath
 .sass-cache
+computeData.json
 serviceAccount.json
 .ensime*
 
