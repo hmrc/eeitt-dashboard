@@ -66,14 +66,12 @@ package object curlrequests {
   }
 
   def checkFor500(json: JsValue): Int = {
-    val hits = json \ "hits" \ "total"
-    println(hits)
-    hits.get.as[Int]
+    (json \ "hits" \ "total").get.as[Int]
+
   }
 
   def findErrors(list: List[String]) = {
-    val errorFree = list.filter(p => !p.startsWith("request"))
-    errorFree
+    list.filter(p => !p.startsWith("request"))
   }
 
   def compareDataCentreResults(first: Map[String, List[String]], second: Map[String, List[String]]): Boolean = {

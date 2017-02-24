@@ -27,5 +27,5 @@ object Test extends App {
     //    val successResults = inst.getSuccessResults
     //
     //    GoogleSetup.printCurlResults(curlResults, successResults)
-    println(GoogleSetup.authorize)
+//    println(GoogleSetup.authorize)
 }

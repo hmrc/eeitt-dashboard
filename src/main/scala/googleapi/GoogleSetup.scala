@@ -51,9 +51,9 @@ object GoogleSetup {
 //    authService.buildCredentialServiceAccount(signature).accessToken
 //  }
 
-  def authorize = {
-    authService.computeAuthorise()
-  }
+//  def authorize = {
+//    authService.computeAuthorise()
+//  }
 
   def printCurlResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
     serviceSpreadSheet.print(curlResults,successResults)
