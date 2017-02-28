@@ -16,6 +16,6 @@
 
 package models
 
-case class GoogleCredential(
+case class GoogleCredentials(
                                accessToken: String
                              )

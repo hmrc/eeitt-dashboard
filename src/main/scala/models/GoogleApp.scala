@@ -23,7 +23,6 @@ case class GoogleApp(
                       clientEmail: String,
                       fileId: String,
                       userImpersonation: String
-
                     )
 
 object GoogleApp {

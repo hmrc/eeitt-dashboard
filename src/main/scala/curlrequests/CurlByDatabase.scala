@@ -16,15 +16,18 @@
 
 package curlrequests
 
+import java.time.{LocalDate, Period}
+
 import models._
 import play.api.libs.json.JsObject
 
 class CurlByDatabase(environment: Env) {
 
+  val date = LocalDate.now.minus(Period.ofDays(1)).toString.replace("-", ".")
   val dataCentres = Map(
     "Qa" -> "https://kibana-datacentred-sal01-qa.tax.service.gov.uk/elasticsearch/logstash-qa*/_search?pretty",
-    "DataCentre" -> "https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty",
-    "SkyScape" -> "https://kibana-skyscape-farnborough-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty"
+    "DataCentre" -> s"https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production-*-${date}/_search?pretty",
+    "SkyScape" -> s"https://kibana-skyscape-farnborough-production.tax.service.gov.uk/elasticsearch/logstash-production-*-${date}/_search?pretty"
   )
 
   val agents = new Agents(dataCentres(environment.value))
@@ -34,6 +37,7 @@ class CurlByDatabase(environment: Env) {
 
   val lotteryDuty = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value))
   val gamingDuty = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value))
+  val gamingDutyPayment = new SuccessfulSubmissions(GamingDutyPayment, dataCentres(environment.value))
   val airPassengerDuty = new SuccessfulSubmissions(AirPassengerDuty, dataCentres(environment.value))
   val landFill = new SuccessfulSubmissions(LandFill, dataCentres(environment.value))
   val aggregateLevy = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value))
@@ -44,6 +48,7 @@ class CurlByDatabase(environment: Env) {
     Map(
       "LotteryDuty" -> lotteryDuty.getSuccessResults,
       "GamingDuty" -> gamingDuty.getSuccessResults,
+      "GamingDutyPayment" -> gamingDutyPayment.getSuccessResults,
       "AirPassengerDuty" -> airPassengerDuty.getSuccessResults,
       "LandFill" -> landFill.getSuccessResults,
       "AggregatesLevy" -> aggregateLevy.getSuccessResults,

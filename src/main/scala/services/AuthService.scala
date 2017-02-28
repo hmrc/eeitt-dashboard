@@ -16,26 +16,91 @@
 
 package services
 
-import models._
-import scalaj.http.{HttpResponse, _}
+import java.io.File
 
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
+import com.google.api.client.googleapis.auth.oauth2.{GoogleClientSecrets, GoogleCredential}
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.http.HttpTransport
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.util.store.FileDataStoreFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.Permission
+import com.google.api.services.sheets.v4.{Sheets, SheetsScopes}
 
 class AuthService {
 
-  def buildCredentialServiceAccount(string: String): TokenResponse = {
-    _buildCredentialServiceAccount(string, 0)
+  val AppName = "EEITT_LOGGING"
+
+  val DATA_STORE_DIR = new File("sheets.googleapis.com-java-quickstart")
+
+
+  val JSON_FACTORY = JacksonFactory.getDefaultInstance
+  val SCOPES = SheetsScopes.all()
+
+  var HTTP_TRANSPORT: HttpTransport = GoogleNetHttpTransport.newTrustedTransport()
+  var DATA_STORE_FACTORY : FileDataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR)
+
+  //this method is to test outwith domain.
+
+  def buildServiceAccountCredential() = {
+    val credential = new GoogleCredential.Builder()
+      .setTransport(HTTP_TRANSPORT)
+      .setJsonFactory(JSON_FACTORY)
+      .setServiceAccountId(curlrequests.loadApp.clientEmail)
+      .setServiceAccountPrivateKey(curlrequests.privateKey)
+      .setServiceAccountScopes(SheetsScopes.all())
+      .build()
+    credential.refreshToken()
+
+    credential.getAccessToken
+
+    val permission = new Permission()
+    permission.setEmailAddress("daniel.connelly@digital.hmrc.gov.uk")
+    permission.setType("user")
+    permission.setRole("writer")
+    val drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+      .setApplicationName("test")
+      .build()
+
+    val service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+      .setApplicationName("test")
+      .build()
+
+    val spreadsheeets = service.spreadsheets().create(new com.google.api.services.sheets.v4.model.Spreadsheet).execute()
+
+    drive.permissions().create("1u1uZk9DLzx-gfEfZVYJ43KJzniTrkDQlq5W2SijZy60", permission).execute()
+    //    spreadsheeets.getSpreadsheetId
   }
 
-  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
-    val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
-      "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      "assertion" -> string
-    )).asString
-
-    (response.code, numRetry) match {
-      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
-      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
-      case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
-    }
+  def authorise() = {
+    val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()
+    val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
+    val flow = new Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+      .setDataStoreFactory(DATA_STORE_FACTORY)
+      .setAccessType("offline")
+      .build()
+    new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user")
   }
+
+//  Not used but could be quite useful for other projects.
+
+//  def buildCredentialServiceAccount(string: String): TokenResponse = {
+//    _buildCredentialServiceAccount(string, 0)
+//  }
+//
+//  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
+//    val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
+//      "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
+//      "assertion" -> string
+//    )).asString
+//
+//    (response.code, numRetry) match {
+//      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
+//      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
+//      case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
+//    }
+//  }
 }

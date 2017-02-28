@@ -24,16 +24,19 @@ lib_managed
 */**/target/*
 **/target/*
 target
+/sheets.googleapis.com-java-quickstart
 
 **/bin/*
 **/lib/*
 *.classpath
 *.project
 **/*.settings
+servicedata.json
 .project
 .settings
 .classpath
 .sass-cache
+computeData.json
 serviceAccount.json
 .ensime*
 
