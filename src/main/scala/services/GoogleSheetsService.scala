@@ -35,7 +35,7 @@ import scalaz.Scalaz._
 class GoogleSheetsService {
 //  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
-  def gDataApiForToken(credential: Credential, privatekey: PrivateKey): Sheets = {
+  def gDataApiForToken(credential: Credential): Sheets = {
 
     val httpTransport = new NetHttpTransport
     val jsonFactory = new JacksonFactory
@@ -70,9 +70,9 @@ class GoogleSheetsService {
     println("UNIQUEUSERS: - " + intToAnyRef(uniqueUsers))
   }
 
-  def populateWorksheetByFileId(accessToken: Credential, fileId: String, privateKey: PrivateKey, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
+  def populateWorksheetByFileId(accessToken: Credential, fileId: String, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
 
-    val service = gDataApiForToken(accessToken, privateKey)
+    val service = gDataApiForToken(accessToken)
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
@@ -109,7 +109,7 @@ class GoogleSheetsService {
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
     valuerange.setValues(values)
-    val spreadsheet = service.spreadsheets().values().append(fileId, "A1:E1", valuerange).setValueInputOption("RAW").execute() //metafeedUrl, classOf[SpreadsheetEntry])
+    val spreadsheet = service.spreadsheets().values().append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange).setValueInputOption("RAW").execute() //metafeedUrl, classOf[SpreadsheetEntry])
 
     spreadsheet
   }

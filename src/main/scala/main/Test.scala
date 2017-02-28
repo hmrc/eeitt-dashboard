@@ -19,13 +19,17 @@ package main
 import curlrequests.CurlByDatabase
 import googleapi.GoogleSetup
 import models.QA
+import services.{AuthService, GoogleSheetsService}
 
 //sbt "run-main main.Test"
 object Test extends App {
+
+  val inst = new AuthService
+  val sheets = new GoogleSheetsService
 //    val inst = new CurlByDatabase(QA) //QA - Qa database
     //    val curlResults = inst.getCurlResults
     //    val successResults = inst.getSuccessResults
     //
     //    GoogleSetup.printCurlResults(curlResults, successResults)
-//    println(GoogleSetup.authorize)
+    println(sheets.gDataApiForToken(inst.authorise()))
 }
