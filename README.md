@@ -1,30 +1,23 @@
-govuk-template
-==============
+How to Run
+==========
 
-[![Build Status](https://travis-ci.org/hmrc/govuk-template.svg)](https://travis-ci.org/hmrc/govuk-template) [ ![Download](https://api.bintray.com/packages/hmrc/releases/govuk-template/images/download.svg) ](https://bintray.com/hmrc/releases/govuk-template/_latestVersion)
+go to Google dev console : https://console.developers.google.com/
 
-Simple library wrapping the [GDS GOV.UK template](https://github.com/alphagov/govuk_template_play).
+go to credentials tab on the left hand side.
 
-Note that currently we forked the GDS files. This solution is temporary and in future we will import the GDS artifact directly.
+go to create credentials.
 
-### Using the template
+click OAuth Client Id
 
-In order to use the template, you have to add this line to your application `routes` file
+When in new page select Other, supply desired name.
 
-```scala
-->     /template                       template.Routes
-```
+Download the json file that this creates to your machine and save it in the src/main/resources with the
+file name of servicedata.json
 
-### Installing
+now with the desired Google sheet. collect the ID which is the random string in the url.
 
-Add the following to your SBT build:
-```scala
-resolvers += Resolver.bintrayRepo("hmrc", "releases")
+add this to a file called serviceAccount.json in src/main/resources again. in the format off :
 
-libraryDependencies += "uk.gov.hmrc" % "govuk-template" % "[INSERT-VERSION]"
-```
-
-## License ##
-
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-
+{
+  "fileId": ""
+}

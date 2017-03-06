@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DATE="$(date -d "-2 days" -Idate)"
+DATE="$(date -d "-1 days" -Idate)"
 
 STARTHOURS=$1
 
@@ -10,7 +10,7 @@ FORM=$3
 
 DATACENTRE=$4
 
-DATE_MILLIS="$(date -d "-1 days" --date=${DATE} +%s)000"
+DATE_MILLIS="$(date --date=${DATE} +%s)000"
 DATE_START_MILLIS=$(($DATE_MILLIS+${STARTHOURS}*3600000-1))
 DATE_END_MILLIS=$(($DATE_MILLIS+${ENDHOURS}*3600000))
 

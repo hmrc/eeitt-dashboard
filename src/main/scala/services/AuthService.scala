@@ -45,35 +45,35 @@ class AuthService {
 
   //this method is to test outwith domain.
 
-  def buildServiceAccountCredential() = {
-    val credential = new GoogleCredential.Builder()
-      .setTransport(HTTP_TRANSPORT)
-      .setJsonFactory(JSON_FACTORY)
-      .setServiceAccountId(curlrequests.loadApp.clientEmail)
-      .setServiceAccountPrivateKey(curlrequests.privateKey)
-      .setServiceAccountScopes(SheetsScopes.all())
-      .build()
-    credential.refreshToken()
-
-    credential.getAccessToken
-
-    val permission = new Permission()
-    permission.setEmailAddress("daniel.connelly@digital.hmrc.gov.uk")
-    permission.setType("user")
-    permission.setRole("writer")
-    val drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-      .setApplicationName("test")
-      .build()
-
-    val service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-      .setApplicationName("test")
-      .build()
-
-    val spreadsheeets = service.spreadsheets().create(new com.google.api.services.sheets.v4.model.Spreadsheet).execute()
-
-    drive.permissions().create("1u1uZk9DLzx-gfEfZVYJ43KJzniTrkDQlq5W2SijZy60", permission).execute()
-    //    spreadsheeets.getSpreadsheetId
-  }
+//  def buildServiceAccountCredential() = {
+//    val credential = new GoogleCredential.Builder()
+//      .setTransport(HTTP_TRANSPORT)
+//      .setJsonFactory(JSON_FACTORY)
+//      .setServiceAccountId(curlrequests.loadApp.clientEmail)
+//      .setServiceAccountPrivateKey(curlrequests.privateKey)
+//      .setServiceAccountScopes(SheetsScopes.all())
+//      .build()
+//    credential.refreshToken()
+//
+//    credential.getAccessToken
+//
+//    val permission = new Permission()
+//    permission.setEmailAddress("daniel.connelly@digital.hmrc.gov.uk")
+//    permission.setType("user")
+//    permission.setRole("writer")
+//    val drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+//      .setApplicationName("test")
+//      .build()
+//
+//    val service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+//      .setApplicationName("test")
+//      .build()
+//
+//    val spreadsheeets = service.spreadsheets().create(new com.google.api.services.sheets.v4.model.Spreadsheet).execute()
+//
+//    drive.permissions().create("1u1uZk9DLzx-gfEfZVYJ43KJzniTrkDQlq5W2SijZy60", permission).execute()
+//    //    spreadsheeets.getSpreadsheetId
+//  }
 
   def authorise() = {
     val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()

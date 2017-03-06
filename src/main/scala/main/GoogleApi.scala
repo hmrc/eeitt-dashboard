@@ -25,6 +25,7 @@ import models.{DataCentre, LotteryDuty, QA, SkyScape}
 
 object GoogleApi extends App {
 
+  println(args.toList)
   val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
   val curlResultsSkyScape = skyscape.getCurlResults
   val successResultsSkyScape = skyscape.getSuccessResults

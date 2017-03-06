@@ -19,10 +19,7 @@ package models
 import play.api.libs.json.{Json, Reads}
 
 case class GoogleApp(
-                      privateKey: String,
-                      clientEmail: String,
-                      fileId: String,
-                      userImpersonation: String
+                      fileId: String
                     )
 
 object GoogleApp {
