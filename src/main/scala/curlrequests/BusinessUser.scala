@@ -26,14 +26,11 @@ import scala.sys.process.Process
 class BusinessUser(dataCentre: String) {
 
   def getBusinessResults : List[String]= {
-    get2(0, 24, checkFor500, parseJsonFromRequest, resultsBuissnessQuery)
+    splitRequest(0, 24, is500, parseJsonFromRequest, resultsBuissnessQuery)
   }
 
   def resultsBuissnessQuery(start: Int, end: Int): JsValue= {
     play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCentre}") !!)
   }
 
-  def test(a : Int, b: Int): Unit ={
-
-  }
 }

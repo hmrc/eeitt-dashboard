@@ -16,7 +16,7 @@
 
 package models
 
-case class Env(value:String)
-object QA extends Env("Qa")
-object DataCentre extends Env("DataCentre")
-object SkyScape extends Env("SkyScape")
+case class Environment(value:String)
+object QA extends Environment("Qa")
+object DataCentre extends Environment("DataCentre")
+object SkyScape extends Environment("SkyScape")

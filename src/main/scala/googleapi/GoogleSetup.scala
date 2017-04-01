@@ -41,6 +41,7 @@ import services.{AuthService, GoogleSheetsService, tokenUrlBase}
 import scalaj.http.Http
 
 object GoogleSetup {
+
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
 
@@ -55,7 +56,7 @@ object GoogleSetup {
 //    authService.computeAuthorise()
 //  }
 
-  def printCurlResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
+  def printResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
     serviceSpreadSheet.print(curlResults,successResults)
   }
 

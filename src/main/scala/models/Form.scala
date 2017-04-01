@@ -17,7 +17,6 @@
 package models
 
 case class Form(value: String)
-
 object LotteryDuty extends Form("promoters-monthly-lottery-duty-return")
 object BingoDuty extends Form("bingo-duty-promoters-monthly-return")
 object LandFill extends Form("landfill-tax-return")

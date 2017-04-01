@@ -54,7 +54,7 @@ class GoogleSheetsService {
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
     val numOfAgents: Int = data("Agents").size
-    val date: LocalDate = LocalDate.now.minus(Period.ofDays(1))
+    val date: LocalDate = LocalDate.now.minus(Period.ofDays(2))
     println("DATE: - " + stringToAnyRef(date.toString))
     println("BUSINESSUSERS: - " + intToAnyRef(totalBuissnessUsers))
     println("AGENTS: - " + intToAnyRef(numOfAgents))

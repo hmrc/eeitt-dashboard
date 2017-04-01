@@ -25,15 +25,12 @@ import scala.sys.process.Process
   */
 class Agents (dataCentre: String){
 
-  def getAgentResults : List[String]= {
-    get2(0, 24, checkFor500, parseJsonFromRequest, resultsAgentQuery)
+  def getResults : List[String]= {
+    splitRequest(0, 24, is500, parseJsonFromRequest, resultsQuery)
   }
 
-  def resultsAgentQuery(start: Int, end: Int): JsValue = {
+  def resultsQuery(start: Int, end: Int): JsValue = {
     play.api.libs.json.Json.parse(Process(s"./LiveAgent.sh $start $end ${dataCentre}") !!)
   }
 
-  def test(a : Int, b: Int): Unit ={
-
-  }
 }

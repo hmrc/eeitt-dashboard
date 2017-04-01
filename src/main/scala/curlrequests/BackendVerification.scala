@@ -25,15 +25,12 @@ import scala.sys.process.Process
   */
 class BackendVerification(dataCentre: String){
 
-  def getBackendResults : List[String]= {
-    findErrors(get2(0, 24, checkFor500, parseJsonFromRequest, resultsBackendVerification))
+  def getResults : List[String]= {
+    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, resultsQuery))
   }
 
-  def resultsBackendVerification(start: Int, end: Int) : JsValue = {
+  def resultsQuery(start: Int, end: Int) : JsValue = {
     play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end ${dataCentre}") !!)
   }
 
-  def test(a : Int, b: Int): Unit ={
-
-  }
 }

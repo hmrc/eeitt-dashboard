@@ -16,7 +16,7 @@
 
 package curlrequests
 
-import models.{Env, Form, LogLineContents}
+import models.{Environment, Form, LogLineContents}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 
@@ -24,11 +24,11 @@ import scala.sys.process.Process
 
 class SuccessfulSubmissions(form: Form, dataCentre : String) {
 
-  def getSuccessResults = {
-    parseJsonFromRequestSuccessfulSubmissions(resultsSuccessQuery(0, 24))
+  def getResults = {
+    parseJsonFromRequestSuccessfulSubmissions(queryResults(0, 24))
   }
 
-  def resultsSuccessQuery(start : Int, end : Int) = {
+  def queryResults(start : Int, end : Int) = {
     play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre") !! )
   }
 

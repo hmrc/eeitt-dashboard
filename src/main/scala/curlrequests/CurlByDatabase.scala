@@ -21,7 +21,7 @@ import java.time.{LocalDate, Period}
 import models._
 import play.api.libs.json.JsObject
 
-class CurlByDatabase(environment: Env) {
+class CurlByDatabase(environment: Environment) {
 
   val date = LocalDate.now.minus(Period.ofDays(1)).toString.replace("-", ".")
   val dataCentres = Map(
@@ -46,22 +46,22 @@ class CurlByDatabase(environment: Env) {
 
   def getSuccessResults : Map[String, List[JsObject]] = {
     Map(
-      "LotteryDuty" -> lotteryDuty.getSuccessResults,
-      "GamingDuty" -> gamingDuty.getSuccessResults,
-      "GamingDutyPayment" -> gamingDutyPayment.getSuccessResults,
-      "AirPassengerDuty" -> airPassengerDuty.getSuccessResults,
-      "LandFill" -> landFill.getSuccessResults,
-      "AggregatesLevy" -> aggregateLevy.getSuccessResults,
-      "BingoDuty" -> bingoDuty.getSuccessResults,
-      "InsurancePremiumTax" -> insurancePremiumTax.getSuccessResults
+      "LotteryDuty" -> lotteryDuty.getResults,
+      "GamingDuty" -> gamingDuty.getResults,
+      "GamingDutyPayment" -> gamingDutyPayment.getResults,
+      "AirPassengerDuty" -> airPassengerDuty.getResults,
+      "LandFill" -> landFill.getResults,
+      "AggregatesLevy" -> aggregateLevy.getResults,
+      "BingoDuty" -> bingoDuty.getResults,
+      "InsurancePremiumTax" -> insurancePremiumTax.getResults
     )
   }
 
   def getCurlResults: Map[String, List[String]] = {
     Map(
       "BusinessUsers" -> businessUser.getBusinessResults,
-      "Agents" -> agents.getAgentResults,
-      "Backend" -> backendVerification.getBackendResults,
+      "Agents" -> agents.getResults,
+      "Backend" -> backendVerification.getResults,
       "Frontend" -> frontendVerification.getFrontendResults
     )
   }

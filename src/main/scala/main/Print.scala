@@ -33,7 +33,7 @@ object Print extends App {
   val successResultsDataCentre = dataCentre.getSuccessResults
 
   if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.printCurlResults(curlResultsDataCentre, successResultsDataCentre)
+    GoogleSetup.printResults(curlResultsDataCentre, successResultsDataCentre)
   } else {
     println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
   }

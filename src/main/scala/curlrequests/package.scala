@@ -30,7 +30,7 @@ package object curlrequests {
 //  val key: String = loadApp.privateKey
 //  val privateKey: PrivateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
 
-  def get2(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => JsValue): List[String] = {
+  def splitRequest(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => JsValue): List[String] = {
 
     val res = result(start, end)
     if (numElements(res) <= 500) {
@@ -39,7 +39,7 @@ package object curlrequests {
     } else{
       val middle = ((end - start) / 2 + (end - start) % 2)+start
 
-      get2(start, middle, numElements, elements, result) ::: get2(middle, end, numElements, elements, result)
+      splitRequest(start, middle, numElements, elements, result) ::: splitRequest(middle, end, numElements, elements, result)
 
     }
   }
@@ -65,12 +65,11 @@ package object curlrequests {
       }
   }
 
-  def checkFor500(json: JsValue): Int = {
+  def is500(json: JsValue): Int = {
     (json \ "hits" \ "total").get.as[Int]
-
   }
 
-  def findErrors(list: List[String]) = {
+  def filterErrors(list: List[String]) = {
     list.filter(p => !p.startsWith("request"))
   }
 
