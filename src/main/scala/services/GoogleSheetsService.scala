@@ -55,19 +55,19 @@ class GoogleSheetsService {
     val totalBuissnessUsers: Int = info.values.sum
     val numOfAgents: Int = data("Agents").size
     val date: LocalDate = LocalDate.now.minus(Period.ofDays(2))
-    println("DATE: - " + stringToAnyRef(date.toString))
-    println("BUSINESSUSERS: - " + intToAnyRef(totalBuissnessUsers))
-    println("AGENTS: - " + intToAnyRef(numOfAgents))
-    println("AL: - " + intToAnyRef(info("'AL'")) + "Succeded : - " + num("AggregatesLevy").size)
-    println("AP: - " + intToAnyRef(info("'AP'")) + "Succeded : - " + num("AirPassengerDuty").size)
-    println("BD: - " + intToAnyRef(info("'BD'")) + "Succeded : - " + num("BingoDuty").size)
-    println("GD: - " + intToAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDutyPayment").size + "Gaming Duty Returns" + num("GamingDuty").size )
-    println("IP: - " + intToAnyRef(info("'IP'")) + "Succeded : - " + num("InsurancePremiumTax").size)
-    println("LD: - " + intToAnyRef(info("'LD'")) + "Succeded : - " + num("LotteryDuty").size)
-    println("LF: - " + intToAnyRef(info("'LF'")) + "Succeded : - " + num("LandFill").size)
-    println("FRONTEND: - " + intToAnyRef(data("Frontend").size))
-    println("BACKEND: - " + intToAnyRef(data("Backend").size))
-    println("UNIQUEUSERS: - " + intToAnyRef(uniqueUsers))
+    println("DATE: - " + toAnyRef(date.toString))
+    println("BUSINESSUSERS: - " + toAnyRef(totalBuissnessUsers))
+    println("AGENTS: - " + toAnyRef(numOfAgents))
+    println("AL: - " + toAnyRef(info("'AL'")) + "Succeded : - " + num("AggregatesLevy").size)
+    println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + num("AirPassengerDuty").size)
+    println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + num("BingoDuty").size)
+    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDutyPayment").size + "Gaming Duty Returns" + num("GamingDuty").size )
+    println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + num("InsurancePremiumTax").size)
+    println("LD: - " + toAnyRef(info("'LD'")) + "Succeded : - " + num("LotteryDuty").size)
+    println("LF: - " + toAnyRef(info("'LF'")) + "Succeded : - " + num("LandFill").size)
+    println("FRONTEND: - " + toAnyRef(data("Frontend").size))
+    println("BACKEND: - " + toAnyRef(data("Backend").size))
+    println("UNIQUEUSERS: - " + toAnyRef(uniqueUsers))
   }
 
   def populateWorksheetByFileId(accessToken: Credential, fileId: String, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
@@ -83,43 +83,37 @@ class GoogleSheetsService {
 
     val values: java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
-        stringToAnyRef(date.toString),
-        intToAnyRef(totalBuissnessUsers),
-        intToAnyRef(numOfAgents),
-        intToAnyRef(info("'AL'")),
-        intToAnyRef(info("'AP'")),
-        intToAnyRef(info("'BD'")),
-        intToAnyRef(info("'GD'")),
-        intToAnyRef(info("'IP'")),
-        intToAnyRef(info("'LD'")),
-        intToAnyRef(info("'LF'")),
-        intToAnyRef(data("Frontend").size),
-        intToAnyRef(data("Backend").size),
-        intToAnyRef(uniqueUsers),
-        intToAnyRef(num("AggregatesLevy").size),
-        intToAnyRef(num("AirPassengerDuty").size),
-        intToAnyRef(num("BingoDuty").size),
-        intToAnyRef(num("GamingDutyPayment").size),
-        intToAnyRef(num("InsurancePremiumTax").size),
-        intToAnyRef(num("LotteryDuty").size),
-        intToAnyRef(num("LandFill").size),
-        intToAnyRef(num("GamingDuty").size)
+        toAnyRef(date.toString),
+        toAnyRef(totalBuissnessUsers),
+        toAnyRef(numOfAgents),
+        toAnyRef(info("'AL'")),
+        toAnyRef(info("'AP'")),
+        toAnyRef(info("'BD'")),
+        toAnyRef(info("'GD'")),
+        toAnyRef(info("'IP'")),
+        toAnyRef(info("'LD'")),
+        toAnyRef(info("'LF'")),
+        toAnyRef(data("Frontend").size),
+        toAnyRef(data("Backend").size),
+        toAnyRef(uniqueUsers),
+        toAnyRef(num("AggregatesLevy").size),
+        toAnyRef(num("AirPassengerDuty").size),
+        toAnyRef(num("BingoDuty").size),
+        toAnyRef(num("GamingDutyPayment").size),
+        toAnyRef(num("InsurancePremiumTax").size),
+        toAnyRef(num("LotteryDuty").size),
+        toAnyRef(num("LandFill").size),
+        toAnyRef(num("GamingDuty").size)
       ).asJava
     ).asJava
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
     valuerange.setValues(values)
-    val spreadsheet = service.spreadsheets().values().append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange).setValueInputOption("RAW").execute() //metafeedUrl, classOf[SpreadsheetEntry])
-
-    spreadsheet
+    service.spreadsheets().values().append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange).setValueInputOption("RAW").execute()
   }
 
-  private def intToAnyRef(int: Int): AnyRef = {
-    java.lang.Integer.valueOf(int)
-  }
-
-  private def stringToAnyRef(string: String): AnyRef = {
-    string
+  private def toAnyRef[A](value: A): AnyRef = {
+    value.asInstanceOf[AnyRef]
   }
 
   private def parseJsonData(data: List[String]): Map[String, Int] = {
@@ -131,7 +125,6 @@ class GoogleSheetsService {
   }
 
   private def parseVerificationJsonData(data: List[String]): Int = {
-    val groupedData = data.groupBy(o => o.split("groupId")(1).split(",")(0))
-    groupedData.size
+    data.groupBy(o => o.split("groupId")(1).split(",")(0)).size
   }
 }

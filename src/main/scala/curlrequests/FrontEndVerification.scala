@@ -23,11 +23,11 @@ import scala.sys.process.Process
   */
 class FrontEndVerification(dataCentre: String) {
 
-  def getFrontendResults: List[String] = {
-    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, resultsFrontendVerification))
+  def getResults: List[String] = {
+    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
-  def resultsFrontendVerification(start: Int, end: Int) = {
+  def queryResults(start: Int, end: Int) = {
     play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
   }
 

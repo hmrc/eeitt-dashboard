@@ -59,10 +59,10 @@ class CurlByDatabase(environment: Environment) {
 
   def getCurlResults: Map[String, List[String]] = {
     Map(
-      "BusinessUsers" -> businessUser.getBusinessResults,
+      "BusinessUsers" -> businessUser.getResults,
       "Agents" -> agents.getResults,
       "Backend" -> backendVerification.getResults,
-      "Frontend" -> frontendVerification.getFrontendResults
+      "Frontend" -> frontendVerification.getResults
     )
   }
 }
