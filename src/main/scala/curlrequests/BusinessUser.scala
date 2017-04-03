@@ -20,17 +20,14 @@ import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
 
-/**
-  * Created by harrison on 08/02/17.
-  */
 class BusinessUser(dataCentre: String) {
 
-  def getBusinessResults : List[String]= {
-    splitRequest(0, 24, is500, parseJsonFromRequest, resultsBuissnessQuery)
+  def getResults : List[String]= {
+    splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
   }
 
-  def resultsBuissnessQuery(start: Int, end: Int): JsValue= {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCentre}") !!)
+  def queryResults(start: Int, end: Int): JsValue= {
+    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre").!!)
   }
 
 }

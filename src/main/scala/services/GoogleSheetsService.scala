@@ -47,30 +47,30 @@ class GoogleSheetsService {
     service
   }
 
-  def print(data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
+  def print(data: Map[String, List[String]]) : Unit = {
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
-    val numOfAgents: Int = data("Agents").size
+    val dataOfAgents: Int = data("Agents").size
     val date: LocalDate = LocalDate.now.minus(Period.ofDays(2))
-    println("DATE: - " + stringToAnyRef(date.toString))
-    println("BUSINESSUSERS: - " + intToAnyRef(totalBuissnessUsers))
-    println("AGENTS: - " + intToAnyRef(numOfAgents))
-    println("AL: - " + intToAnyRef(info("'AL'")) + "Succeded : - " + num("AggregatesLevy").size)
-    println("AP: - " + intToAnyRef(info("'AP'")) + "Succeded : - " + num("AirPassengerDuty").size)
-    println("BD: - " + intToAnyRef(info("'BD'")) + "Succeded : - " + num("BingoDuty").size)
-    println("GD: - " + intToAnyRef(info("'GD'")) + "Succeded : - " + num("GamingDutyPayment").size + "Gaming Duty Returns" + num("GamingDuty").size )
-    println("IP: - " + intToAnyRef(info("'IP'")) + "Succeded : - " + num("InsurancePremiumTax").size)
-    println("LD: - " + intToAnyRef(info("'LD'")) + "Succeded : - " + num("LotteryDuty").size)
-    println("LF: - " + intToAnyRef(info("'LF'")) + "Succeded : - " + num("LandFill").size)
-    println("FRONTEND: - " + intToAnyRef(data("Frontend").size))
-    println("BACKEND: - " + intToAnyRef(data("Backend").size))
-    println("UNIQUEUSERS: - " + intToAnyRef(uniqueUsers))
+    println("DATE: - " + toAnyRef(date.toString))
+    println("BUSINESSUSERS: - " + toAnyRef(totalBuissnessUsers))
+    println("AGENTS: - " + toAnyRef(dataOfAgents))
+    println("AL: - " + toAnyRef(info("'AL'")) + "Succeded : - " + data("AggregatesLevy").size)
+    println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
+    println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
+    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDutyPayment").size + "Gaming Duty Returns" + data("GamingDuty").size )
+    println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
+    println("LD: - " + toAnyRef(info("'LD'")) + "Succeded : - " + data("LotteryDuty").size)
+    println("LF: - " + toAnyRef(info("'LF'")) + "Succeded : - " + data("LandFill").size)
+    println("FRONTEND: - " + toAnyRef(data("Frontend").size))
+    println("BACKEND: - " + toAnyRef(data("Backend").size))
+    println("UNIQUEUSERS: - " + toAnyRef(uniqueUsers))
   }
 
-  def populateWorksheetByFileId(accessToken: Credential, fileId: String, data: Map[String, List[String]], num: Map[String, List[JsObject]]) = {
+  def populateWorksheetByFileId(accessToken: Credential, fileId: String, data: Map[String, List[String]]) = {
 
     val service = gDataApiForToken(accessToken)
 
@@ -78,60 +78,58 @@ class GoogleSheetsService {
 
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
-    val numOfAgents: Int = data("Agents").size
+    val dataOfAgents: Int = data("Agents").size
     val date: LocalDate = LocalDate.now.minus(Period.ofDays(1))
 
     val values: java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
-        stringToAnyRef(date.toString),
-        intToAnyRef(totalBuissnessUsers),
-        intToAnyRef(numOfAgents),
-        intToAnyRef(info("'AL'")),
-        intToAnyRef(info("'AP'")),
-        intToAnyRef(info("'BD'")),
-        intToAnyRef(info("'GD'")),
-        intToAnyRef(info("'IP'")),
-        intToAnyRef(info("'LD'")),
-        intToAnyRef(info("'LF'")),
-        intToAnyRef(data("Frontend").size),
-        intToAnyRef(data("Backend").size),
-        intToAnyRef(uniqueUsers),
-        intToAnyRef(num("AggregatesLevy").size),
-        intToAnyRef(num("AirPassengerDuty").size),
-        intToAnyRef(num("BingoDuty").size),
-        intToAnyRef(num("GamingDutyPayment").size),
-        intToAnyRef(num("InsurancePremiumTax").size),
-        intToAnyRef(num("LotteryDuty").size),
-        intToAnyRef(num("LandFill").size),
-        intToAnyRef(num("GamingDuty").size)
+        toAnyRef(date.toString),
+        toAnyRef(totalBuissnessUsers),
+        toAnyRef(dataOfAgents),
+        toAnyRef(info("'AL'")),
+        toAnyRef(info("'AP'")),
+        toAnyRef(info("'BD'")),
+        toAnyRef(info("'GD'")),
+        toAnyRef(info("'IP'")),
+        toAnyRef(info("'LD'")),
+        toAnyRef(info("'LF'")),
+        toAnyRef(data("Frontend").size),
+        toAnyRef(data("Backend").size),
+        toAnyRef(uniqueUsers),
+        toAnyRef(data("AggregatesLevy").size),
+        toAnyRef(data("AirPassengerDuty").size),
+        toAnyRef(data("BingoDuty").size),
+        toAnyRef(data("GamingDutyPayment").size),
+        toAnyRef(data("InsurancePremiumTax").size),
+        toAnyRef(data("LotteryDuty").size),
+        toAnyRef(data("LandFill").size),
+        toAnyRef(data("GamingDuty").size)
       ).asJava
     ).asJava
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
     valuerange.setValues(values)
-    val spreadsheet = service.spreadsheets().values().append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange).setValueInputOption("RAW").execute() //metafeedUrl, classOf[SpreadsheetEntry])
-
-    spreadsheet
+    service
+      .spreadsheets()
+      .values()
+      .append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange)
+      .setValueInputOption("RAW")
+      .execute()
   }
 
-  private def intToAnyRef(int: Int): AnyRef = {
-    java.lang.Integer.valueOf(int)
-  }
-
-  private def stringToAnyRef(string: String): AnyRef = {
-    string
+  private def toAnyRef[A](value: A): AnyRef = {
+    value.asInstanceOf[AnyRef]
   }
 
   private def parseJsonData(data: List[String]): Map[String, Int] = {
     val groupedData = data.groupBy(o => o.split(" ")(8))
     val map = Map("'AL'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'GD'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
-    val numData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
+    val dataData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
 
-    numData |+| map
+    dataData |+| map
   }
 
   private def parseVerificationJsonData(data: List[String]): Int = {
-    val groupedData = data.groupBy(o => o.split("groupId")(1).split(",")(0))
-    groupedData.size
+    data.groupBy(o => o.split("groupId")(1).split(",")(0)).size
   }
 }

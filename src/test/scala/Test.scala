@@ -19,7 +19,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import scala.annotation.tailrec
 
 
-class test extends UnitSpec {
+class Test extends UnitSpec {
    def get2(start: Int, end: Int, numElements: (Int, Int) => Int, elements: (Int, Int) => List[String], threshold: Int): List[String] = {
 
      val res = numElements(start, end)

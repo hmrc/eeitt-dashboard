@@ -43,15 +43,13 @@ import BuildDependenices._
     "com.netaporter" % "scala-uri_2.11" % "0.4.16",
     "org.scalaj" %% "scalaj-http" % "2.3.0",
     "org.jsoup" % "jsoup" % "1.8.1" % "test",
-    //    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
-//    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
     Test.scalaTest,
     Test.pegdown,
     Test.hmrcTest,
     Test.scalaTestPlus
   )
 
-  lazy val library = Project(appName, file("."))
+  lazy val library : Project = Project(appName, file("."))
     .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
     .settings(
       name := appName,
@@ -69,7 +67,7 @@ import BuildDependenices._
 
 object Dependencies {
   object Compile {
-    val play = "com.typesafe.play" %% "play_2.11" % "2.5.12"
+    val play : ModuleID = "com.typesafe.play" %% "play_2.11" % "2.5.12"
 
   }
 }
@@ -80,10 +78,10 @@ private object BuildDependenices{
   }
 
   sealed abstract class Test(scope: String) {
-     val hmrcTest = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope
-    val scalaTest = "org.scalatest" %% "scalatest" % "2.2.4" % scope
-    val pegdown = "org.pegdown" % "pegdown" % "1.5.0" % scope
-    val scalaTestPlus = "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % scope
+     val hmrcTest : ModuleID  = "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope
+    val scalaTest : ModuleID = "org.scalatest" %% "scalatest" % "2.2.4" % scope
+    val pegdown : ModuleID = "org.pegdown" % "pegdown" % "1.5.0" % scope
+    val scalaTestPlus : ModuleID = "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % scope
 
   }
   object Test extends Test("test")

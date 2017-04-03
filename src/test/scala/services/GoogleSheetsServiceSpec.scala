@@ -25,34 +25,5 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 
 class GoogleSheetsServiceSpec extends UnitSpec {
-  "Parsing Json data in for the Auth token" should {
-    "Succeed with valid Json" in {
-      val validJson =
-        """{
-        "privateKey": "bob",
-        "clientEmail": "test-test@test.iam.gserviceaccount.com",
-        "fileId": "0121test",
-        "userImpersonation": "test@test.co.uk"}"""
-      noException should be thrownBy Json.fromJson[GoogleApp](validJson)
-    }
 
-    "Fail with invalid Json" in {
-      val invalidJson =
-        """{
-        : "bob",
-        "client_email": "test-test@test.iam.gserviceaccount.com",
-        "file_id": "0121test",
-        "user_impersonation": "test@test.co.uk"}"""
-      a[JsonParseException] shouldBe thrownBy(Json.fromJson[GoogleApp](invalidJson))
-    }
-  }
-
-  "Reading in the file with the Json data in it" should {
-    "Succeed with a file exists if file is found" in {
-     noException should be thrownBy scala.io.Source.fromFile("src/test/resources/serviceAccountTest.json")
-    }
-    "Fail with a no file found exception" in {
-      a [FileNotFoundException] should be thrownBy scala.io.Source.fromFile("src/test/resoces/serviceAccountTest.json")
-    }
-  }
 }

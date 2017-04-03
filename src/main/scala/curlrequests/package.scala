@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-import java.security.PrivateKey
-
 import models.{GoogleApp, LogLineContents}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
-import uk.gov.hmrc.secure.AsymmetricDecrypter
 
-/**
-  * Created by harrison on 08/02/17.
-  */
 package object curlrequests {
 
-  lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
-//  val key: String = loadApp.privateKey
-//  val privateKey: PrivateKey = AsymmetricDecrypter.buildPrivateKey(key, "RSA")
+  lazy val loadApp : GoogleApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
   def splitRequest(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => JsValue): List[String] = {
 
@@ -69,7 +61,7 @@ package object curlrequests {
     (json \ "hits" \ "total").get.as[Int]
   }
 
-  def filterErrors(list: List[String]) = {
+  def filterErrors(list: List[String]) : List[String] = {
     list.filter(p => !p.startsWith("request"))
   }
 

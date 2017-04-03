@@ -18,28 +18,41 @@ package curlrequests
 
 import models.{Environment, Form, LogLineContents}
 import play.api.Logger
-import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
+import play.api.libs.json._
 
 import scala.sys.process.Process
 
 class SuccessfulSubmissions(form: Form, dataCentre : String) {
 
   def getResults = {
-    parseJsonFromRequestSuccessfulSubmissions(queryResults(0, 24))
+    Logger.debug(s"Getting successful submission for ${form.value}")
+    splitRequest(0, 24, is500, parseJsonFromRequestSuccessfulSubmissions, queryResults)
   }
 
   def queryResults(start : Int, end : Int) = {
-    play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre") !! )
+    Logger.debug(s"quering $dataCentre for successful submissions with parameters : - Start = $start, End = $end Form = ${form.value}")
+    play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre").!! )
   }
 
-  def parseJsonFromRequestSuccessfulSubmissions(json: JsValue) : List[JsObject] = {
-    val list = json \ "hits" \ "hits"
-
-    list.validate[List[JsObject]] match {
-      case JsSuccess(x, _) => x
+  def parseJsonFromRequestSuccessfulSubmissions(json: JsValue) : List[String] = {
+    (json \ "hits" \ "hits").validate[List[JsObject]] match {
+      case JsSuccess(x, _) =>
+        x match {
+          case Nil => Nil
+          case listOfObjects => listOfObjects.flatMap{ singleObject =>
+            (singleObject \ "_source" \ "status").validate[Int] match {
+              case JsSuccess(status, _) =>
+                Logger.debug(s"there was a successful hit for ${form.value}")
+                List(status.toString)
+              case JsError(err) =>
+                Logger.debug(s"There wasn't a successful hit for ${form.value}")
+                List()
+            }
+          }
+        }
       case JsError(err) =>
-        Logger.logger.error(err.toString)
-        throw new IllegalArgumentException("No hits inside the logs returned, perhaps date/times are wrong")
+        Logger.debug(err.toString)
+        throw new IllegalArgumentException("no hits inside the logs returned, perhaps date/times are wrong")
     }
   }
 }
