@@ -16,19 +16,18 @@
 
 package curlrequests
 
+import play.api.libs.json.{JsObject, JsValue}
+
 import scala.sys.process.Process
 
-/**
-  * Created by harrison on 08/02/17.
-  */
 class FrontEndVerification(dataCentre: String) {
 
   def getResults: List[String] = {
     filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
-  def queryResults(start: Int, end: Int) = {
-    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
+  def queryResults(start: Int, end: Int) : JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end $dataCentre").!!)
   }
 
 }

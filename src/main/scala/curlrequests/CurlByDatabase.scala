@@ -23,26 +23,26 @@ import play.api.libs.json.JsObject
 
 class CurlByDatabase(environment: Environment) {
 
-  val date = LocalDate.now.minus(Period.ofDays(1)).toString.replace("-", ".")
-  val dataCentres = Map(
+  val date : String  = LocalDate.now.minus(Period.ofDays(1)).toString.replace("-", ".")
+  val dataCentres : Map[String, String] = Map(
     "Qa" -> "https://kibana-datacentred-sal01-qa.tax.service.gov.uk/elasticsearch/logstash-qa*/_search?pretty",
     "DataCentre" -> s"https://kibana-datacentred-sal01-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty",
     "SkyScape" -> s"https://kibana-skyscape-farnborough-production.tax.service.gov.uk/elasticsearch/logstash-production*/_search?pretty"
   )
 
-  val agents = new Agents(dataCentres(environment.value))
-  val businessUser = new BusinessUser(dataCentres(environment.value))
-  val frontendVerification = new FrontEndVerification(dataCentres(environment.value))
-  val backendVerification = new BackendVerification(dataCentres(environment.value))
+  val agents : Agents = new Agents(dataCentres(environment.value))
+  val businessUser : BusinessUser = new BusinessUser(dataCentres(environment.value))
+  val frontendVerification : FrontEndVerification= new FrontEndVerification(dataCentres(environment.value))
+  val backendVerification : BackendVerification = new BackendVerification(dataCentres(environment.value))
 
-  val lotteryDuty = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value))
-  val gamingDuty = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value))
-  val gamingDutyPayment = new SuccessfulSubmissions(GamingDutyPayment, dataCentres(environment.value))
+  val lotteryDuty : SuccessfulSubmissions = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value))
+  val gamingDuty : SuccessfulSubmissions = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value))
+  val gamingDutyPayment : SuccessfulSubmissions = new SuccessfulSubmissions(GamingDutyPayment, dataCentres(environment.value))
   val airPassengerDuty = new SuccessfulSubmissions(AirPassengerDuty, dataCentres(environment.value))
-  val landFill = new SuccessfulSubmissions(LandFill, dataCentres(environment.value))
-  val aggregateLevy = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value))
-  val bingoDuty = new SuccessfulSubmissions(BingoDuty, dataCentres(environment.value))
-  val insurancePremiumTax = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value))
+  val landFill : SuccessfulSubmissions = new SuccessfulSubmissions(LandFill, dataCentres(environment.value))
+  val aggregateLevy : SuccessfulSubmissions = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value))
+  val bingoDuty : SuccessfulSubmissions = new SuccessfulSubmissions(BingoDuty, dataCentres(environment.value))
+  val insurancePremiumTax : SuccessfulSubmissions = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value))
 
   def getSuccessResults : Map[String, List[JsObject]] = {
     Map(

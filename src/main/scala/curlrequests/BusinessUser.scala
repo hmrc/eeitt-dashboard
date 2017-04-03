@@ -30,7 +30,7 @@ class BusinessUser(dataCentre: String) {
   }
 
   def queryResults(start: Int, end: Int): JsValue= {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end ${dataCentre}") !!)
+    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre").!!)
   }
 
 }

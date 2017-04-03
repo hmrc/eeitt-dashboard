@@ -32,6 +32,7 @@ class SuccessfulSubmissions(form: Form, dataCentre : String) {
     play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre") !! )
   }
 
+  //Figure out how to get this to return List[String] to be more generic
   def parseJsonFromRequestSuccessfulSubmissions(json: JsValue) : List[JsObject] = {
     val list = json \ "hits" \ "hits"
 

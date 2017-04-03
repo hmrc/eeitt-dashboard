@@ -30,7 +30,7 @@ class BackendVerification(dataCentre: String){
   }
 
   def queryResults(start: Int, end: Int) : JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end ${dataCentre}") !!)
+    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end $dataCentre").!!)
   }
 
 }
