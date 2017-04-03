@@ -20,9 +20,6 @@ import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
 
-/**
-  * Created by harrison on 08/02/17.
-  */
 class BackendVerification(dataCentre: String){
 
   def getResults : List[String]= {

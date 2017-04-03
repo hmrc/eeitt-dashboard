@@ -16,25 +16,29 @@
 
 package main
 
-import curlrequests.CurlByDatabase
+import curlrequests._
 import googleapi.GoogleSetup
 import models.{DataCentre, SkyScape}
+import play.api.Logger
 
 //sbt "run-main main.Print
 
 object Print extends App {
 
-  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  val curlResultsSkyScape = skyscape.getCurlResults
-  val successResultsSkyScape = skyscape.getSuccessResults
+  val skyscape = new CurlByDatabase(SkyScape)
+  Logger.info("Getting SkyScape Results")
+  val resultsSkyScape : Map[String, List[String]] = skyscape.getResults
 
-  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getCurlResults
-  val successResultsDataCentre = dataCentre.getSuccessResults
+  val dataCentre = new CurlByDatabase(DataCentre)
+  Logger.info("Getting DataCentre Results")
+  val resultsDataCentre : Map[String, List[String]] = dataCentre.getResults
 
-  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.printResults(curlResultsDataCentre, successResultsDataCentre)
+  val isDataCentresEqual : Boolean = compareDataCentreResults(resultsDataCentre, resultsSkyScape)
+
+  Logger.debug("Are the databases returns Equal results : - "+isDataCentresEqual)
+  if(curlrequests.compareDataCentreResults(resultsDataCentre, resultsDataCentre)){
+    GoogleSetup.printResults(resultsDataCentre)
   } else {
-    println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+    Logger.error("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
   }
 }

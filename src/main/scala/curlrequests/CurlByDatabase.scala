@@ -19,7 +19,7 @@ package curlrequests
 import java.time.{LocalDate, Period}
 
 import models._
-import play.api.libs.json.JsObject
+import play.api.libs.json.{JsObject, Json}
 
 class CurlByDatabase(environment: Environment) {
 
@@ -44,7 +44,9 @@ class CurlByDatabase(environment: Environment) {
   val bingoDuty : SuccessfulSubmissions = new SuccessfulSubmissions(BingoDuty, dataCentres(environment.value))
   val insurancePremiumTax : SuccessfulSubmissions = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value))
 
-  def getSuccessResults : Map[String, List[JsObject]] = {
+
+  def getResults : Map[String, List[String]] = {
+//    println(Json.prettyPrint(airPassengerDuty.getResults.head))
     Map(
       "LotteryDuty" -> lotteryDuty.getResults,
       "GamingDuty" -> gamingDuty.getResults,
@@ -53,12 +55,7 @@ class CurlByDatabase(environment: Environment) {
       "LandFill" -> landFill.getResults,
       "AggregatesLevy" -> aggregateLevy.getResults,
       "BingoDuty" -> bingoDuty.getResults,
-      "InsurancePremiumTax" -> insurancePremiumTax.getResults
-    )
-  }
-
-  def getCurlResults: Map[String, List[String]] = {
-    Map(
+      "InsurancePremiumTax" -> insurancePremiumTax.getResults,
       "BusinessUsers" -> businessUser.getResults,
       "Agents" -> agents.getResults,
       "Backend" -> backendVerification.getResults,
