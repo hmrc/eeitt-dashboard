@@ -16,18 +16,8 @@
 
 package curlrequests
 
-import play.api.libs.json.JsValue
+trait Curl {
 
-import scala.sys.process.Process
-
-class Agents (dataCentre: String) extends Curl {
-
-  def getResults : List[String]= {
-    splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
-  }
-
-  def queryResults(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveAgent.sh $start $end $dataCentre $numberOfDays").!!)
-  }
+  val numberOfDays = 1
 
 }

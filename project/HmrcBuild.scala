@@ -43,6 +43,7 @@ import BuildDependenices._
     "com.netaporter" % "scala-uri_2.11" % "0.4.16",
     "org.scalaj" %% "scalaj-http" % "2.3.0",
     "org.jsoup" % "jsoup" % "1.8.1" % "test",
+    "org.typelevel" % "cats-core_2.11" % "0.9.0",
     Test.scalaTest,
     Test.pegdown,
     Test.hmrcTest,

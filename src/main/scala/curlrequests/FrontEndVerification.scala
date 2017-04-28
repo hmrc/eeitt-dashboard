@@ -20,14 +20,14 @@ import play.api.libs.json.{JsObject, JsValue}
 
 import scala.sys.process.Process
 
-class FrontEndVerification(dataCentre: String) {
+class FrontEndVerification(dataCentre: String) extends Curl {
 
   def getResults: List[String] = {
     filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
   def queryResults(start: Int, end: Int) : JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end $dataCentre").!!)
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end $dataCentre $numberOfDays").!!)
   }
 
 }

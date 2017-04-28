@@ -22,16 +22,16 @@ import play.api.libs.json._
 
 import scala.sys.process.Process
 
-class SuccessfulSubmissions(form: Form, dataCentre : String) {
+class SuccessfulSubmissions(form: Form, dataCentre : String) extends Curl {
 
-  def getResults = {
+  def getResults: List[String] = {
     Logger.debug(s"Getting successful submission for ${form.value}")
     splitRequest(0, 24, is500, parseJsonFromRequestSuccessfulSubmissions, queryResults)
   }
 
-  def queryResults(start : Int, end : Int) = {
+  def queryResults(start : Int, end : Int): JsValue = {
     Logger.debug(s"quering $dataCentre for successful submissions with parameters : - Start = $start, End = $end Form = ${form.value}")
-    play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre").!! )
+    play.api.libs.json.Json.parse(Process(s"./Success.sh $start $end  ${form.value} $dataCentre $numberOfDays").!! )
   }
 
   def parseJsonFromRequestSuccessfulSubmissions(json: JsValue) : List[String] = {

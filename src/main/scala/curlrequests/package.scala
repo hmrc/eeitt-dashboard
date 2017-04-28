@@ -14,25 +14,36 @@
  * limitations under the License.
  */
 
+import cats.data.Validated._
+import cats.data.Validated.Valid
 import models.{GoogleApp, LogLineContents}
 import play.api.Logger
-import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
+import play.api.libs.json._
+import cats._
+import cats.data._
+import cats.implicits._
 
 package object curlrequests {
 
+  type validation = Validated[FailureReason, JsValue]
+
   lazy val loadApp : GoogleApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
-  def splitRequest(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => JsValue): List[String] = {
+  def splitRequest(start: Int, end: Int, numElements: (JsValue) => Int, elements: (JsValue) => List[String], result: (Int, Int) => Validated[FailureReason, JsValue]): List[String] = {
 
-    val res = result(start, end)
-    if (numElements(res) <= 500) {
-      elements(res)
+    result(start, end) match {
+      case Valid(x) =>
+        if (numElements(x) <= 500) {
+          elements(x)
+        } else {
+          val middle = ((end - start) / 2 + (end - start) % 2) + start
 
-    } else{
-      val middle = ((end - start) / 2 + (end - start) % 2)+start
+          splitRequest(start, middle, numElements, elements, result) ::: splitRequest(middle, end, numElements, elements, result)
 
-      splitRequest(start, middle, numElements, elements, result) ::: splitRequest(middle, end, numElements, elements, result)
-
+        }
+      case Invalid(y) =>
+        Logger.error(y.reason)
+        List.empty[String]
     }
   }
 
@@ -71,3 +82,4 @@ package object curlrequests {
     firstList.sum == secondList.sum
   }
 }
+
