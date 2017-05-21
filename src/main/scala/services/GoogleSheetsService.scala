@@ -24,7 +24,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
-import com.google.api.services.sheets.v4.model.ValueRange
+import com.google.api.services.sheets.v4.model._
 import models.GoogleApp
 import play.api.libs.json.JsObject
 
@@ -54,7 +54,7 @@ class GoogleSheetsService {
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
     val dataOfAgents: Int = data("Agents").size
-    val date: LocalDate = LocalDate.now.minus(Period.ofDays(2))
+    val date: LocalDate = LocalDate.now.minus(Period.ofDays(1))
     println("DATE: - " + toAnyRef(date.toString))
     println("BUSINESSUSERS: - " + toAnyRef(totalBuissnessUsers))
     println("AGENTS: - " + toAnyRef(dataOfAgents))
@@ -72,7 +72,7 @@ class GoogleSheetsService {
 
   def populateWorksheetByFileId(accessToken: Credential, fileId: String, data: Map[String, List[String]]) = {
 
-    val service = gDataApiForToken(accessToken)
+    val service: Sheets = gDataApiForToken(accessToken)
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
 
@@ -109,12 +109,30 @@ class GoogleSheetsService {
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
     valuerange.setValues(values)
-    service
+    val response = service
       .spreadsheets()
       .values()
       .append("1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", "A1:E1", valuerange)
       .setValueInputOption("RAW")
       .execute()
+    addNewRow(service, "1aGEhkcU4iekb_KQ0zc5AD6opY_Mo2KxY8a1d03DbdDQ", response.getUpdates.getUpdatedRange.split("!")(1).split(":")(0).drop(1).toInt)
+    response
+  }
+
+  def addNewRow(service:Sheets, spreadsheetId: String, startIndex: Int): BatchUpdateSpreadsheetResponse = {
+    val request : BatchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest
+    val thing : Request = new Request
+    val prop : InsertDimensionRequest = new InsertDimensionRequest
+    val range : DimensionRange = new DimensionRange
+    range.setDimension("ROWS")
+    range.setSheetId(0)
+    range.setStartIndex(startIndex)
+    range.setEndIndex(startIndex+1)
+    prop.setInheritFromBefore(true)
+    prop.setRange(range)
+    thing.setInsertDimension(prop)
+    request.setRequests(List(thing).asJava)
+    service.spreadsheets().batchUpdate(spreadsheetId, request).execute()
   }
 
   private def toAnyRef[A](value: A): AnyRef = {
