@@ -31,15 +31,10 @@ class BusinessUser(dataCentre: String) extends Curl {
     splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
   }
 
-  def queryResults(start: Int, end: Int): Validated[FailureReason, JsValue] = {
-    Validated.fromTry(Try(play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre $numberOfDays").!!))).leftMap[FailureReason](throwable => FailureReason("The Curl did not return Valid Json"))
+  def queryResults(start: Int, end: Int): JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre $numberOfDays").!!)
   }
 
-  def test = {
-    queryResults(0, 24) match {
-      case Valid(x) => x
-    }
-  }
 }
 
 case class FailureReason(reason : String)
