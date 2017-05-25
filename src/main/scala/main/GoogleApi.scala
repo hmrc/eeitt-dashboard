@@ -16,28 +16,30 @@
 
 package main
 
-import akka.actor.Status.Success
-import curlrequests.{CurlByDatabase, SuccessfulSubmissions}
+import curlrequests.CurlByDatabase
 import googleapi.GoogleSetup
-import models.{DataCentre, LotteryDuty, QA, SkyScape}
+import models.{DataCentre, SkyScape}
+import play.api.Logger
+import curlrequests._
 
 //sbt "run-main main.GoogleApi"
 
 object GoogleApi extends App {
 
-  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  val curlResultsSkyScape = skyscape.getCurlResults
-  val successResultsSkyScape = skyscape.getSuccessResults
+  val skyscape = new CurlByDatabase(SkyScape)
+  Logger.info("Getting SkyScape Results")
+  val resultsSkyScape : Map[String, List[String]] = skyscape.getResults
 
-  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getCurlResults
-  val successResultsDataCentre = dataCentre.getSuccessResults
+  val dataCentre = new CurlByDatabase(DataCentre)
+  Logger.info("Getting DataCentre Results")
+  val resultsDataCentre : Map[String, List[String]] = dataCentre.getResults
 
-  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre, successResultsDataCentre)
+  val isDataCentresEqual : Boolean = compareDataCentreResults(resultsDataCentre, resultsSkyScape)
+
+  Logger.debug("Are the databases returns Equal results : - "+isDataCentresEqual)
+  if(isDataCentresEqual){
+    GoogleSetup.oauthOneTimeCode(resultsDataCentre)
   } else {
-    println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+    Logger.error("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
   }
-
-//  GoogleSetup.oauthOneTimeCode(curlResults)
 }

@@ -16,25 +16,8 @@
 
 package curlrequests
 
-import cats.data.Validated
-import cats.data.Validated.Valid
-import play.api.libs.json.JsValue
+trait Curl {
 
-import scala.sys.process.Process
-import curlrequests._
-
-import scala.util.Try
-
-class BusinessUser(dataCentre: String) extends Curl {
-
-  def getResults : List[String]= {
-    splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
-  }
-
-  def queryResults(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre $numberOfDays").!!)
-  }
+  val numberOfDays = 1
 
 }
-
-case class FailureReason(reason : String)

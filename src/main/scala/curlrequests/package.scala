@@ -21,9 +21,6 @@ import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import uk.gov.hmrc.secure.AsymmetricDecrypter
 
-/**
-  * Created by harrison on 08/02/17.
-  */
 package object curlrequests {
 
   lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
@@ -69,7 +66,7 @@ package object curlrequests {
     (json \ "hits" \ "total").get.as[Int]
   }
 
-  def filterErrors(list: List[String]) = {
+  def filterErrors(list: List[String]) : List[String] = {
     list.filter(p => !p.startsWith("request"))
   }
 
@@ -79,3 +76,4 @@ package object curlrequests {
     firstList.sum == secondList.sum
   }
 }
+

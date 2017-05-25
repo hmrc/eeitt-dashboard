@@ -20,17 +20,14 @@ import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
 
-/**
-  * Created by harrison on 08/02/17.
-  */
-class BackendVerification(dataCentre: String){
+class BackendVerification(dataCentre: String) extends Curl {
 
   def getResults : List[String]= {
-    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, resultsQuery))
+    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
-  def resultsQuery(start: Int, end: Int) : JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end ${dataCentre}") !!)
+  def queryResults(start: Int, end: Int) : JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end $dataCentre $numberOfDays").!!)
   }
 
 }

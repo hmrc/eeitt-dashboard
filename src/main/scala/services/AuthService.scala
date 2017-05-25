@@ -16,8 +16,10 @@
 
 package services
 
-import java.io.File
+import java.io.{File, FileInputStream, FileReader}
+import java.util.Collections
 
+import com.google.api.client.auth.oauth2.AuthorizationCodeFlow
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
@@ -75,9 +77,22 @@ class AuthService {
 //    //    spreadsheeets.getSpreadsheetId
 //  }
 
+//  def fromStream = {
+//    val credential: GoogleCredential = GoogleCredential.fromStream(new FileInputStream(""))
+//      .createScoped(Collections.singleton(SheetsScopes.DRIVE))
+//    credential
+//    new AuthorizationCodeFlow.Builder()
+//    .setClientAuthentication()}
+
   def authorise() = {
     val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()
     val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
+    val user = new GoogleCredential.Builder()
+      .setClientSecrets("", "")
+      .setTransport(HTTP_TRANSPORT)
+      .setJsonFactory(JSON_FACTORY)
+      .build()
+    user
     val flow = new Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
       .setDataStoreFactory(DATA_STORE_FACTORY)
       .setAccessType("offline")
