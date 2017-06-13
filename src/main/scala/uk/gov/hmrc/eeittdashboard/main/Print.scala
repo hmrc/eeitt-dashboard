@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.eeittdashboard.main
 
+import uk.gov.hmrc.eeittdashboard.curlrequests
 import uk.gov.hmrc.eeittdashboard.curlrequests.CurlByDatabase
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
-import models.{DataCentre, SkyScape}
+import uk.gov.hmrc.eeittdashboard.models.{DataCentre, SkyScape}
 
 //sbt "run-uk.gov.hmrc.eeittdashboard.main uk.gov.hmrc.eeittdashboard.main.Print
 

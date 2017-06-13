@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
-import models.{Environment, LogLineContents}
+import uk.gov.hmrc.eeittdashboard.models.{Environment, LogLineContents}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import uk.gov.hmrc.eeittdashboard.models.Form
