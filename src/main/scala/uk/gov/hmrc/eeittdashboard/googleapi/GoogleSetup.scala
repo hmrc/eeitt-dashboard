@@ -36,7 +36,8 @@ import com.google.api.services.drive.model.Permission
 import com.google.api.services.sheets.v4.{Sheets, SheetsScopes}
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import play.api.libs.json.JsObject
-import uk.gov.hmrc.eeittdashboard.GoogleSheetsService
+import uk.gov.hmrc.eeittdashboard.curlrequests
+import uk.gov.hmrc.eeittdashboard.services.GoogleSheetsService
 import uk.gov.hmrc.eeittdashboard.services.{AuthService, GoogleSheetsService, tokenUrlBase}
 
 import scalaj.http.Http

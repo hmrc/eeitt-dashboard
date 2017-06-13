@@ -18,8 +18,8 @@ package uk.gov.hmrc.eeittdashboard.main
 
 import uk.gov.hmrc.eeittdashboard.curlrequests.CurlByDatabase
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
-import models.QA
-import uk.gov.hmrc.eeittdashboard.GoogleSheetsService
+import uk.gov.hmrc.eeittdashboard.models.QA
+import uk.gov.hmrc.eeittdashboard.services.GoogleSheetsService
 import uk.gov.hmrc.eeittdashboard.services.{AuthService, GoogleSheetsService}
 
 //sbt "run-uk.gov.hmrc.eeittdashboard.main uk.gov.hmrc.eeittdashboard.main.Test"

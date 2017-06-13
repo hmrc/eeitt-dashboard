@@ -17,9 +17,10 @@
 package uk.gov.hmrc.eeittdashboard.main
 
 import akka.actor.Status.Success
+import uk.gov.hmrc.eeittdashboard.curlrequests
 import uk.gov.hmrc.eeittdashboard.curlrequests.{CurlByDatabase, SuccessfulSubmissions}
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
-import models.{DataCentre, QA, SkyScape}
+import uk.gov.hmrc.eeittdashboard.models.{DataCentre, QA, SkyScape}
 
 //sbt "run-uk.gov.hmrc.eeittdashboard.main uk.gov.hmrc.eeittdashboard.main.GoogleApi"
 
