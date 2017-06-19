@@ -58,8 +58,13 @@ object GoogleSetup {
 //    authService.computeAuthorise()
 //  }
 
-  def
-  printResults(results : Map[String, List[String]]) = {
+  //Used to Dependency.
+  def writeToSpreadSheet(accessToken: String, results: Map[String, List[String]]) = {
+    val credential = authService.passAuthToken(accessToken)
+    serviceSpreadSheet.populateWorksheetByFileId(credential, curlrequests.loadApp.fileId, results)
+  }
+
+  def printResults(results : Map[String, List[String]]) = {
     serviceSpreadSheet.print(results)
   }
 

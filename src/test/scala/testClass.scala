@@ -44,8 +44,8 @@ class test extends UnitSpec {
   def numsHalf(start:Int, end:Int) = testFctHalf(start, end).size
 
   "this" should {
-    "return 18" in {
-      get2(0, 24, nums, testFct, 500).size shouldBe 18
+    "return 144" in {
+      get2(0, 24, nums, testFct, 500).size shouldBe 144
     }
   }
 }
