@@ -25,7 +25,7 @@ object PreconfiguredJWT {
 
 //  def createPreConfiguredJWT: String = {
 //    val jsonFactory = new JacksonFactory
-//    JsonWebSignature.signUsingRsaSha256(uk.gov.hmrc.eeittdashboard.curlrequests.privateKey, jsonFactory, header, payloadForSheets)
+//    JsonWebSignature.signUsingRsaSha256(curlrequests.privateKey, jsonFactory, header, payloadForSheets)
 //  }
 
 //  private def header: JsonWebSignature.Header = {
@@ -41,9 +41,9 @@ object PreconfiguredJWT {
 //
 //    val payload = new JsonWebToken.Payload
 //    payload.set("scope", "https://spreadsheets.google.com/feeds/spreadsheets https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive")
-//    payload.setIssuer("118233204770086347928")//uk.gov.hmrc.eeittdashboard.curlrequests.loadApp.clientEmail)
+//    payload.setIssuer("118233204770086347928")//curlrequests.loadApp.clientEmail)
 //    payload.setAudience("https://www.googleapis.com/oauth2/v4/token")
-//    payload.setSubject(uk.gov.hmrc.eeittdashboard.curlrequests.loadApp.userImpersonation)
+//    payload.setSubject(curlrequests.loadApp.userImpersonation)
 //    payload.setIssuedAtTimeSeconds(issueTime)
 //    payload.setExpirationTimeSeconds(exp)
 //

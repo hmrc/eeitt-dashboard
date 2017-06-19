@@ -16,22 +16,11 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
-import cats.data.Validated
-import cats.data.Validated.Valid
-import play.api.libs.json.JsValue
+import pureconfig.loadConfigOrThrow
 
-import scala.sys.process.Process
+case class NumberOfDays(days: Int)
 
-class BusinessUser(dataCentre: String) extends Curl {
+trait Curl {
 
-  def getResults : List[String]= {
-    splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
-  }
-
-  def queryResults(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre $numberOfDays").!!)
-  }
-
+  val numberOfDays: Int = loadConfigOrThrow[NumberOfDays]("numberofdays").days
 }
-
-case class FailureReason(reason : String)

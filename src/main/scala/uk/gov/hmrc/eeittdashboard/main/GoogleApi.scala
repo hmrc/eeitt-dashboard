@@ -17,8 +17,10 @@
 package uk.gov.hmrc.eeittdashboard.main
 
 import akka.actor.Status.Success
+import play.api.Logger
+import pureconfig.loadConfigOrThrow
 import uk.gov.hmrc.eeittdashboard.curlrequests
-import uk.gov.hmrc.eeittdashboard.curlrequests.{CurlByDatabase, SuccessfulSubmissions}
+import uk.gov.hmrc.eeittdashboard.curlrequests.{CurlByDatabase, NumberOfDays, SuccessfulSubmissions}
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
 import uk.gov.hmrc.eeittdashboard.models.{DataCentre, QA, SkyScape}
 
@@ -26,16 +28,16 @@ import uk.gov.hmrc.eeittdashboard.models.{DataCentre, QA, SkyScape}
 
 object GoogleApi extends App {
 
+  Logger.info(loadConfigOrThrow[NumberOfDays]("numberofdays").days.toString)
   val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  val curlResultsSkyScape = skyscape.getCurlResults
-  val successResultsSkyScape = skyscape.getSuccessResults
-
+  Logger.info("Getting SkyScape Results")
+  val curlResultsSkyScape = skyscape.getResults
+  Logger.info("Getting DataCentre Results")
   val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getCurlResults
-  val successResultsDataCentre = dataCentre.getSuccessResults
+  val curlResultsDataCentre = dataCentre.getResults
 
   if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre, successResultsDataCentre)
+    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
   } else {
     println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
   }

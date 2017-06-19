@@ -74,7 +74,7 @@ class AuthService {
 //  }
 
   def authorise() = {
-    val in = scala.io.Source.fromFile("src/uk.gov.hmrc.eeittdashboard.main/resources/servicedata.json").reader()
+    val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()
     val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
     val flow = new Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
       .setDataStoreFactory(DATA_STORE_FACTORY)
