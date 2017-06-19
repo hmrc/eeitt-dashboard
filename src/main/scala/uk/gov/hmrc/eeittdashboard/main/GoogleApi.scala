@@ -36,11 +36,14 @@ object GoogleApi extends App {
   val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
   val curlResultsDataCentre = dataCentre.getResults
 
-  if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
+  if(args.isEmpty) {
+    if (curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)) {
+      GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
+    } else {
+      println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+    }
   } else {
-    println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+    GoogleSetup.writeToSpreadSheet(args(0), curlResultsDataCentre)
   }
-
 //  GoogleSetup.oauthOneTimeCode(curlResults)
 }

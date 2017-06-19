@@ -34,7 +34,6 @@ class FunctionalLoopSpec extends UnitSpec {
     }
   }
 
-
   def testFct(start: Int, end: Int) = if (end - start <= 2) List.fill(9)("") else List.fill(501)("")
 
   def testFctHalf(start:Int, end: Int) = List.fill(410)("")
@@ -44,8 +43,8 @@ class FunctionalLoopSpec extends UnitSpec {
   def numsHalf(start:Int, end:Int) = testFctHalf(start, end).size
 
   "this" should {
-    "return 18" in {
-      get2(0, 24, nums, testFct, 500).size shouldBe 18
+    "return 144" in {
+      get2(0, 24, nums, testFct, 500).size shouldBe 144
     }
   }
 }

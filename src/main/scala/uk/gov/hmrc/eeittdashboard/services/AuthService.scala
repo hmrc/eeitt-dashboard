@@ -18,10 +18,11 @@ package uk.gov.hmrc.eeittdashboard.services
 
 import java.io.File
 
+import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
+import com.google.api.client.googleapis.auth.oauth2.{GoogleClientSecrets, GoogleCredential}
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -32,14 +33,11 @@ class AuthService {
 
   val AppName = "EEITT_LOGGING"
 
-  val DATA_STORE_DIR = new File("sheets.googleapis.com-java-quickstart")
-
 
   val JSON_FACTORY = JacksonFactory.getDefaultInstance
   val SCOPES = SheetsScopes.all()
 
   var HTTP_TRANSPORT: HttpTransport = GoogleNetHttpTransport.newTrustedTransport()
-  var DATA_STORE_FACTORY : FileDataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR)
 
   //this method is to test outwith domain.
 
@@ -73,7 +71,14 @@ class AuthService {
 //    //    spreadsheeets.getSpreadsheetId
 //  }
 
+  def passAuthToken(accessToken: String): GoogleCredential = {
+    val bob = new GoogleCredential.Builder().build()
+    bob.setAccessToken(accessToken)
+  }
+
   def authorise() = {
+    val DATA_STORE_DIR = new File("sheets.googleapis.com-java-quickstart")
+    val DATA_STORE_FACTORY : FileDataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR)
     val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()
     val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
     val flow = new Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)

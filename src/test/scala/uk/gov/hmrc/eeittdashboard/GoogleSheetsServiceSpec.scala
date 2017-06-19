@@ -29,10 +29,8 @@ class GoogleSheetsServiceSpec extends UnitSpec {
     "Succeed with valid Json" in {
       val validJson =
         """{
-        "privateKey": "bob",
-        "clientEmail": "test-test@test.iam.gserviceaccount.com",
-        "fileId": "0121test",
-        "userImpersonation": "test@test.co.uk"}"""
+        "fileId": "bob"
+       }"""
       noException should be thrownBy Json.fromJson[GoogleApp](validJson)
     }
 
