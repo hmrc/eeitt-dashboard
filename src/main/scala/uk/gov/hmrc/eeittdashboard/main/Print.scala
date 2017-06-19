@@ -26,15 +26,13 @@ import uk.gov.hmrc.eeittdashboard.models.{DataCentre, SkyScape}
 object Print extends App {
 
   val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  val curlResultsSkyScape = skyscape.getCurlResults
-  val successResultsSkyScape = skyscape.getSuccessResults
+  val curlResultsSkyScape = skyscape.getResults
 
   val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getCurlResults
-  val successResultsDataCentre = dataCentre.getSuccessResults
+  val curlResultsDataCentre = dataCentre.getResults
 
   if(curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)){
-    GoogleSetup.printResults(curlResultsDataCentre, successResultsDataCentre)
+    GoogleSetup.printResults(curlResultsDataCentre)
   } else {
     println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
   }

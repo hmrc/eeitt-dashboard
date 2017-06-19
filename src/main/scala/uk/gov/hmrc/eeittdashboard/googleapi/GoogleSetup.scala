@@ -58,12 +58,13 @@ object GoogleSetup {
 //    authService.computeAuthorise()
 //  }
 
-  def printResults(curlResults : Map[String, List[String]], successResults : Map[String, List[JsObject]]) = {
-    serviceSpreadSheet.print(curlResults,successResults)
+  def
+  printResults(results : Map[String, List[String]]) = {
+    serviceSpreadSheet.print(results)
   }
 
-  def oauthOneTimeCode(curlResults: Map[String, List[String]], successResults : Map[String, List[JsObject]]): AppendValuesResponse = {
+  def oauthOneTimeCode(results: Map[String, List[String]]): AppendValuesResponse = {
     val accessToken = authService.authorise()
-    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, curlResults, successResults)
+    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, results)
   }
 }

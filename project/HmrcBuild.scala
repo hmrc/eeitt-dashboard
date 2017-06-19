@@ -25,6 +25,7 @@ import BuildDependenices._
 
   val appDependencies = Seq(
     "uk.gov.hmrc" %% "secure" % "7.0.0",
+    "com.github.pureconfig" %% "pureconfig" % "0.7.2",
     "uk.gov.hmrc" %% "play-reactivemongo" % "5.1.0",
     "uk.gov.hmrc" %% "microservice-bootstrap" % "5.8.0",
     "uk.gov.hmrc" %% "play-authorisation" % "4.2.0",

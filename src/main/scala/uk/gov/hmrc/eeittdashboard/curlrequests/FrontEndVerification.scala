@@ -16,19 +16,18 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
+import play.api.libs.json.{JsObject, JsValue}
+
 import scala.sys.process.Process
 
-/**
-  * Created by harrison on 08/02/17.
-  */
-class FrontEndVerification(dataCentre: String) {
+class FrontEndVerification(dataCentre: String) extends Curl {
 
-  def getFrontendResults: List[String] = {
-    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, resultsFrontendVerification))
+  def getResults: List[String] = {
+    filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
-  def resultsFrontendVerification(start: Int, end: Int) = {
-    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end ${dataCentre}") !!)
+  def queryResults(start: Int, end: Int) : JsValue = {
+    play.api.libs.json.Json.parse(Process(s"./FrontendVerification.sh $start $end $dataCentre $numberOfDays").!!)
   }
 
 }
