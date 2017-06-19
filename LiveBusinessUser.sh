@@ -20,4 +20,6 @@ fi
 DATE_START_MILLIS=$(($DATE_MILLIS+${STARTHOURS}*3600000-1))
 DATE_END_MILLIS=$(($DATE_MILLIS+${ENDHOURS}*3600000))
 
-curl -s -S -X POST -u $VPNU:$VPNPASS -H "kbn-xsrf: kibana" -d '{"size":500,"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query": "app:eeitt AND NOT app:\"eeitt-frontend\" AND \"registration of business\""}},{"range":{"@timestamp":{"gte":'${DATE_START_MILLIS}',"lte":'${DATE_END_MILLIS}',"format":"epoch_millis"}}}],"must_not":[]}}}' "${DATACENTRE}"
+#curl -s -S -X POST -u $VPNU:$VPNPASS -H "kbn-xsrf: kibana" -d '{"size":500,"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query": "app:eeitt AND NOT app:\"eeitt-frontend\" AND \"registration of business\""}},{"range":{"@timestamp":{"gte":'${DATE_START_MILLIS}',"lte":'${DATE_END_MILLIS}',"format":"epoch_millis"}}}],"must_not":[]}}}' "${DATACENTRE}"
+
+curl -s -S -X POST -H "kbn-xsrf: kibana" -d '{"size":500,"query":{"bool":{"must":[{"query_string":{"analyze_wildcard":true,"query": "app:eeitt AND NOT app:\"eeitt-frontend\" AND \"registration of business\""}},{"range":{"@timestamp":{"gte":'${DATE_START_MILLIS}',"lte":'${DATE_END_MILLIS}',"format":"epoch_millis"}}}],"must_not":[]}}}' "${DATACENTRE}"

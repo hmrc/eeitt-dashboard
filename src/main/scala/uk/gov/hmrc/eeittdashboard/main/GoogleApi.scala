@@ -28,22 +28,25 @@ import uk.gov.hmrc.eeittdashboard.models.{DataCentre, QA, SkyScape}
 
 object GoogleApi extends App {
 
-  Logger.info(loadConfigOrThrow[NumberOfDays]("numberofdays").days.toString)
-  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-  Logger.info("Getting SkyScape Results")
-  val curlResultsSkyScape = skyscape.getResults
-  Logger.info("Getting DataCentre Results")
-  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-  val curlResultsDataCentre = dataCentre.getResults
-
+  //Logger.info(loadConfigOrThrow[NumberOfDays]("numberofdays").days.toString)
+//  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
+//  Logger.info("Getting SkyScape Results")
+//  val curlResultsSkyScape = skyscape.getResults
+//  Logger.info("Getting DataCentre Results")
+//  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
+//  val curlResultsDataCentre = dataCentre.getResults
+  val qa = new CurlByDatabase(QA)
+  val results = qa.getResults
   if(args.isEmpty) {
-    if (curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)) {
-      GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
-    } else {
-      println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
-    }
+//    if (curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)) {
+      Logger.info("Installed application flow : - ")
+    GoogleSetup.oauthOneTimeCode(results)
+//    } else {
+//      println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+//    }
   } else {
-    GoogleSetup.writeToSpreadSheet(args(0), curlResultsDataCentre)
+    Logger.info("Admin Console flow : - ")
+    GoogleSetup.writeToSpreadSheet(args(0), results)
   }
 //  GoogleSetup.oauthOneTimeCode(curlResults)
 }
