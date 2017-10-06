@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.eeittdashboard.models
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{ Json, Reads }
 
 case class GoogleApp(
-                      fileId: String
-                    )
+  fileId: String
+)
 
 object GoogleApp {
   implicit val format: Reads[GoogleApp] = Json.reads[GoogleApp]

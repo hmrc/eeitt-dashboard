@@ -34,7 +34,7 @@ package uk.gov.hmrc.eeittdashboard
 
 import java.net.URL
 
-import com.fasterxml.jackson.databind.{ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.databind.{ ObjectMapper, PropertyNamingStrategy }
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import models.GoogleApp
@@ -53,7 +53,7 @@ package object services {
     }
 
     def fromJson[T](value: String, allowUnderscores: Boolean = false)(implicit m: Manifest[T]): T = {
-      val mapper = if(allowUnderscores) {
+      val mapper = if (allowUnderscores) {
         val m = this.mapper
         m.setPropertyNamingStrategy(
           PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES

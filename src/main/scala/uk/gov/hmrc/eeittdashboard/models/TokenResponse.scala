@@ -17,7 +17,7 @@
 package uk.gov.hmrc.eeittdashboard.models
 
 case class TokenResponse(
-                          accessToken: String,
-                          tokenType: String,
-                          expiresIn: Int
-                        )
+  accessToken: String,
+  tokenType: String,
+  expiresIn: Int
+)

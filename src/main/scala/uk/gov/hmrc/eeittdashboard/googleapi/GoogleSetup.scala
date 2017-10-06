@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.eeittdashboard.googleapi
 
-import java.io.{File, FileInputStream, InputStream, InputStreamReader}
+import java.io.{ File, FileInputStream, InputStream, InputStreamReader }
 import java.util.Collections
 
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
-import com.google.api.client.googleapis.auth.oauth2.{GoogleAuthorizationCodeFlow, GoogleClientSecrets, GoogleCredential}
+import com.google.api.client.googleapis.auth.oauth2.{ GoogleAuthorizationCodeFlow, GoogleClientSecrets, GoogleCredential }
 import com.google.api.client.googleapis.compute.ComputeCredential
 import com.google.api.client.googleapis
 import com.google.api.client.googleapis.extensions.appengine.auth.oauth2.AppIdentityCredential
@@ -33,12 +33,12 @@ import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.Permission
-import com.google.api.services.sheets.v4.{Sheets, SheetsScopes}
+import com.google.api.services.sheets.v4.{ Sheets, SheetsScopes }
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.eeittdashboard.curlrequests
 import uk.gov.hmrc.eeittdashboard.services.GoogleSheetsService
-import uk.gov.hmrc.eeittdashboard.services.{AuthService, GoogleSheetsService, tokenUrlBase}
+import uk.gov.hmrc.eeittdashboard.services.{ AuthService, GoogleSheetsService, tokenUrlBase }
 
 import scalaj.http.Http
 
@@ -47,16 +47,16 @@ object GoogleSetup {
   val authService = new AuthService
   val serviceSpreadSheet = new GoogleSheetsService
 
-//  No longer used due to more convient setup found, however could be useful in near future.
+  //  No longer used due to more convient setup found, however could be useful in near future.
 
-//  def getAccessToken: String = {
-//    val signature = PreconfiguredJWT.createPreConfiguredJWT
-//    authService.buildCredentialServiceAccount(signature).accessToken
-//  }
+  //  def getAccessToken: String = {
+  //    val signature = PreconfiguredJWT.createPreConfiguredJWT
+  //    authService.buildCredentialServiceAccount(signature).accessToken
+  //  }
 
-//  def authorize = {
-//    authService.computeAuthorise()
-//  }
+  //  def authorize = {
+  //    authService.computeAuthorise()
+  //  }
 
   //Used to Dependency.
   def writeToSpreadSheet(accessToken: String, results: Map[String, List[String]]) = {
@@ -64,7 +64,7 @@ object GoogleSetup {
     serviceSpreadSheet.populateWorksheetByFileId(credential, curlrequests.loadApp.fileId, results)
   }
 
-  def printResults(results : Map[String, List[String]]) = {
+  def printResults(results: Map[String, List[String]]) = {
     serviceSpreadSheet.print(results)
   }
 

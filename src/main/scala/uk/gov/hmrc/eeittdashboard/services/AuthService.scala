@@ -22,7 +22,7 @@ import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow.Builder
-import com.google.api.client.googleapis.auth.oauth2.{GoogleClientSecrets, GoogleCredential}
+import com.google.api.client.googleapis.auth.oauth2.{ GoogleClientSecrets, GoogleCredential }
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -33,7 +33,6 @@ class AuthService {
 
   val AppName = "EEITT_LOGGING"
 
-
   val JSON_FACTORY = JacksonFactory.getDefaultInstance
   val SCOPES = SheetsScopes.all()
 
@@ -41,35 +40,35 @@ class AuthService {
 
   //this method is to test outwith domain.
 
-//  def buildServiceAccountCredential() = {
-//    val credential = new GoogleCredential.Builder()
-//      .setTransport(HTTP_TRANSPORT)
-//      .setJsonFactory(JSON_FACTORY)
-//      .setServiceAccountId(uk.gov.hmrc.eeittdashboard.curlrequests.loadApp.clientEmail)
-//      .setServiceAccountPrivateKey(uk.gov.hmrc.eeittdashboard.curlrequests.privateKey)
-//      .setServiceAccountScopes(SheetsScopes.all())
-//      .build()
-//    credential.refreshToken()
-//
-//    credential.getAccessToken
-//
-//    val permission = new Permission()
-//    permission.setEmailAddress("daniel.connelly@digital.hmrc.gov.uk")
-//    permission.setType("user")
-//    permission.setRole("writer")
-//    val drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-//      .setApplicationName("test")
-//      .build()
-//
-//    val service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-//      .setApplicationName("test")
-//      .build()
-//
-//    val spreadsheeets = service.spreadsheets().create(new com.google.api.uk.gov.hmrc.eeittdashboard.services.sheets.v4.model.Spreadsheet).execute()
-//
-//    drive.permissions().create("1u1uZk9DLzx-gfEfZVYJ43KJzniTrkDQlq5W2SijZy60", permission).execute()
-//    //    spreadsheeets.getSpreadsheetId
-//  }
+  //  def buildServiceAccountCredential() = {
+  //    val credential = new GoogleCredential.Builder()
+  //      .setTransport(HTTP_TRANSPORT)
+  //      .setJsonFactory(JSON_FACTORY)
+  //      .setServiceAccountId(uk.gov.hmrc.eeittdashboard.curlrequests.loadApp.clientEmail)
+  //      .setServiceAccountPrivateKey(uk.gov.hmrc.eeittdashboard.curlrequests.privateKey)
+  //      .setServiceAccountScopes(SheetsScopes.all())
+  //      .build()
+  //    credential.refreshToken()
+  //
+  //    credential.getAccessToken
+  //
+  //    val permission = new Permission()
+  //    permission.setEmailAddress("daniel.connelly@digital.hmrc.gov.uk")
+  //    permission.setType("user")
+  //    permission.setRole("writer")
+  //    val drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+  //      .setApplicationName("test")
+  //      .build()
+  //
+  //    val service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+  //      .setApplicationName("test")
+  //      .build()
+  //
+  //    val spreadsheeets = service.spreadsheets().create(new com.google.api.uk.gov.hmrc.eeittdashboard.services.sheets.v4.model.Spreadsheet).execute()
+  //
+  //    drive.permissions().create("1u1uZk9DLzx-gfEfZVYJ43KJzniTrkDQlq5W2SijZy60", permission).execute()
+  //    //    spreadsheeets.getSpreadsheetId
+  //  }
 
   def passAuthToken(accessToken: String): GoogleCredential = {
     val bob = new GoogleCredential.Builder().build()
@@ -78,7 +77,7 @@ class AuthService {
 
   def authorise() = {
     val DATA_STORE_DIR = new File("sheets.googleapis.com-java-quickstart")
-    val DATA_STORE_FACTORY : FileDataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR)
+    val DATA_STORE_FACTORY: FileDataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR)
     val in = scala.io.Source.fromFile("src/main/resources/servicedata.json").reader()
     val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, in)
     val flow = new Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
@@ -88,22 +87,22 @@ class AuthService {
     new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user")
   }
 
-//  Not used but could be quite useful for other projects.
+  //  Not used but could be quite useful for other projects.
 
-//  def buildCredentialServiceAccount(string: String): TokenResponse = {
-//    _buildCredentialServiceAccount(string, 0)
-//  }
-//
-//  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
-//    val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
-//      "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
-//      "assertion" -> string
-//    )).asString
-//
-//    (response.code, numRetry) match {
-//      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
-//      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
-//      case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
-//    }
-//  }
+  //  def buildCredentialServiceAccount(string: String): TokenResponse = {
+  //    _buildCredentialServiceAccount(string, 0)
+  //  }
+  //
+  //  def _buildCredentialServiceAccount(string: String, numRetry: Int): TokenResponse = {
+  //    val response: HttpResponse[String] = Http(tokenUrlBase).postForm(Seq(
+  //      "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
+  //      "assertion" -> string
+  //    )).asString
+  //
+  //    (response.code, numRetry) match {
+  //      case (200, _) => Json.fromJson[TokenResponse](response.body, true)
+  //      case (401, n) if (n < 5) => _buildCredentialServiceAccount(string, numRetry+1)
+  //      case _ => throw new Exception("OAuth Failed with code %d: %s".format(response.code, response.body))
+  //    }
+  //  }
 }
