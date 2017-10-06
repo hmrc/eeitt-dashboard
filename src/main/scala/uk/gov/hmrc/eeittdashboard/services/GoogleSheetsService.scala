@@ -16,23 +16,23 @@
 
 package uk.gov.hmrc.eeittdashboard.services
 
-import java.time.{LocalDate, Period}
+import java.time.{ LocalDate, Period }
 
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model._
-import play.api.libs.json.JsObject
+import play.api.Logger
 import pureconfig.loadConfigOrThrow
-import uk.gov.hmrc.eeittdashboard.curlrequests.NumberOfDays
+import uk.gov.hmrc.eeittdashboard.models.NumberOfDays
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
 import scalaz.Scalaz._
 
 class GoogleSheetsService {
-//  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/uk.gov.hmrc.eeittdashboard.main/resources/serviceAccount.json").mkString)
+  //  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/uk.gov.hmrc.eeittdashboard.main/resources/serviceAccount.json").mkString)
 
   val numberOfDays = loadConfigOrThrow[NumberOfDays]("numberofdays").days
 
@@ -48,10 +48,10 @@ class GoogleSheetsService {
     service
   }
 
-  def print(data: Map[String, List[String]]) : Unit = {
+  def print(data: Map[String, List[String]]): Unit = {
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
-
+    2
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
     val dataOfAgents: Int = data("Agents").size
@@ -62,7 +62,7 @@ class GoogleSheetsService {
     println("AL: - " + toAnyRef(info("'AL'")) + "Succeded : - " + data("AggregatesLevy").size)
     println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
     println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
-    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDutyPayment").size + "Gaming Duty Returns" + data("GamingDuty").size )
+    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDutyPayment").size + "Gaming Duty Returns" + data("GamingDuty").size)
     println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
     println("LD: - " + toAnyRef(info("'LD'")) + "Succeded : - " + data("LotteryDuty").size)
     println("LF: - " + toAnyRef(info("'LF'")) + "Succeded : - " + data("LandFill").size)
@@ -84,28 +84,28 @@ class GoogleSheetsService {
 
     val values: java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
-        toAnyRef(date.toString),
-        toAnyRef(totalBuissnessUsers),
-        toAnyRef(dataOfAgents),
-        toAnyRef(info("'AL'")),
-        toAnyRef(info("'AP'")),
-        toAnyRef(info("'BD'")),
-        toAnyRef(info("'GD'")),
-        toAnyRef(info("'IP'")),
-        toAnyRef(info("'LD'")),
-        toAnyRef(info("'LF'")),
-        toAnyRef(data("Frontend").size),
-        toAnyRef(data("Backend").size),
-        toAnyRef(uniqueUsers),
-        toAnyRef(data("AggregatesLevy").size),
-        toAnyRef(data("AirPassengerDuty").size),
-        toAnyRef(data("BingoDuty").size),
-        toAnyRef(data("GamingDutyPayment").size),
-        toAnyRef(data("InsurancePremiumTax").size),
-        toAnyRef(data("LotteryDuty").size),
-        toAnyRef(data("LandFill").size),
-        toAnyRef(data("GamingDuty").size)
-      ).asJava
+      toAnyRef(date.toString),
+      toAnyRef(totalBuissnessUsers),
+      toAnyRef(dataOfAgents),
+      toAnyRef(info("'AL'")),
+      toAnyRef(info("'AP'")),
+      toAnyRef(info("'BD'")),
+      toAnyRef(info("'GD'")),
+      toAnyRef(info("'IP'")),
+      toAnyRef(info("'LD'")),
+      toAnyRef(info("'LF'")),
+      toAnyRef(data("Frontend").size),
+      toAnyRef(data("Backend").size),
+      toAnyRef(uniqueUsers),
+      toAnyRef(data("AggregatesLevy").size),
+      toAnyRef(data("AirPassengerDuty").size),
+      toAnyRef(data("BingoDuty").size),
+      toAnyRef(data("GamingDutyPayment").size),
+      toAnyRef(data("InsurancePremiumTax").size),
+      toAnyRef(data("LotteryDuty").size),
+      toAnyRef(data("LandFill").size),
+      toAnyRef(data("GamingDuty").size)
+    ).asJava
     ).asJava
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")
@@ -120,15 +120,15 @@ class GoogleSheetsService {
     response
   }
 
-  def addNewRow(service:Sheets, spreadsheetId: String, startIndex: Int): BatchUpdateSpreadsheetResponse = {
-    val request : BatchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest
-    val thing : Request = new Request
-    val prop : InsertDimensionRequest = new InsertDimensionRequest
-    val range : DimensionRange = new DimensionRange
+  def addNewRow(service: Sheets, spreadsheetId: String, startIndex: Int): BatchUpdateSpreadsheetResponse = {
+    val request: BatchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest
+    val thing: Request = new Request
+    val prop: InsertDimensionRequest = new InsertDimensionRequest
+    val range: DimensionRange = new DimensionRange
     range.setDimension("ROWS")
     range.setSheetId(0)
     range.setStartIndex(startIndex)
-    range.setEndIndex(startIndex+1)
+    range.setEndIndex(startIndex + 1)
     prop.setInheritFromBefore(true)
     prop.setRange(range)
     thing.setInsertDimension(prop)
@@ -149,7 +149,9 @@ class GoogleSheetsService {
   }
 
   private def parseVerificationJsonData(data: List[String]): Int = {
-    val groupedData = data.groupBy(o => o.split("groupId")(1).split(",")(0))
+    val filteredData = data.filterNot(_.startsWith("!"))
+    filteredData.foreach(println)
+    val groupedData = filteredData.groupBy(o => o.split("groupId")(1).split(",")(0))
     groupedData.size
   }
 }

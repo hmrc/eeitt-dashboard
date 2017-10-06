@@ -17,5 +17,5 @@
 package uk.gov.hmrc.eeittdashboard.models
 
 case class GoogleCredentials(
-                               accessToken: String
-                             )
+  accessToken: String
+)

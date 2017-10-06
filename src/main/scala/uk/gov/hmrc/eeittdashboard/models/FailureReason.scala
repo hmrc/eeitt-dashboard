@@ -16,7 +16,4 @@
 
 package uk.gov.hmrc.eeittdashboard.models
 
-case class Environment(value: String)
-object QA extends Environment("Qa")
-object DataCentre extends Environment("DataCentre")
-object SkyScape extends Environment("SkyScape")
+case class FailureReason(reason: String)

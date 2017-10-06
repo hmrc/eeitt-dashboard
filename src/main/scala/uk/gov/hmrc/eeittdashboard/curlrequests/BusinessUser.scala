@@ -18,20 +18,48 @@ package uk.gov.hmrc.eeittdashboard.curlrequests
 
 import cats.data.Validated
 import cats.data.Validated.Valid
+import play.api.Logger
 import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
 
-class BusinessUser(dataCentre: String) extends Curl {
+class BusinessUser(dataCentre: String) {
 
-  def getResults : List[String]= {
+  def getResults: List[String] = {
     splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
   }
 
-  def queryResults(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveBusinessUser.sh $start $end $dataCentre $numberOfDays").!!)
+  def queryResults(start: Float, end: Float): JsValue = {
+    Logger.debug(s"quering BusinessUsers")
+    play.api.libs.json.Json.parse(call(start, end, queryJson, dataCentre).body)
+  }
+
+  def queryJson(start: Float, end: Float): String = {
+    s"""{
+      |  "size": 500,
+      |  "query": {
+      |    "bool": {
+      |      "must": [
+      |        {
+      |          "query_string": {
+      |            "analyze_wildcard": true,
+      |            "query": "app:eeitt AND NOT app:\\"eeitt-frontend\\" AND \\"registration of business\\""
+      |          }
+      |        },
+      |        {
+      |          "range": {
+      |            "@timestamp": {
+      |              "gte": ${millis(start)},
+      |              "lte": ${millis(end)},
+      |              "format": "epoch_millis"
+      |            }
+      |          }
+      |        }
+      |      ],
+      |      "must_not": []
+      |    }
+      |  }
+      |}""".stripMargin
   }
 
 }
-
-case class FailureReason(reason : String)

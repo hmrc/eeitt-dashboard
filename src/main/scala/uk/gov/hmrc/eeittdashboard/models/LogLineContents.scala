@@ -18,15 +18,15 @@ package uk.gov.hmrc.eeittdashboard.models
 
 import play.api.libs.json.Json
 
-
-case class LogLineContents(app: String,
-                           hostname: String,
-                           timestamp: String,
-                           message: String,
-                           logger: String,
-                           thread: String,
-                           level: String
-                    )
+case class LogLineContents(
+  app: String,
+  hostname: String,
+  timestamp: String,
+  message: String,
+  logger: String,
+  thread: String,
+  level: String
+)
 
 object LogLineContents {
   implicit val format = Json.format[LogLineContents]

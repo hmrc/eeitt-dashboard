@@ -20,33 +20,32 @@ import akka.actor.Status.Success
 import play.api.Logger
 import pureconfig.loadConfigOrThrow
 import uk.gov.hmrc.eeittdashboard.curlrequests
-import uk.gov.hmrc.eeittdashboard.curlrequests.{CurlByDatabase, NumberOfDays, SuccessfulSubmissions}
+import uk.gov.hmrc.eeittdashboard.curlrequests.{ CurlByDatabase, SuccessfulSubmissions }
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
-import uk.gov.hmrc.eeittdashboard.models.{DataCentre, QA, SkyScape}
+import uk.gov.hmrc.eeittdashboard.models.{ DataCentre, QA, SkyScape }
 
 //sbt "run-uk.gov.hmrc.eeittdashboard.main uk.gov.hmrc.eeittdashboard.main.GoogleApi"
 
 object GoogleApi extends App {
 
-  //Logger.info(loadConfigOrThrow[NumberOfDays]("numberofdays").days.toString)
-//  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
-//  Logger.info("Getting SkyScape Results")
-//  val curlResultsSkyScape = skyscape.getResults
-//  Logger.info("Getting DataCentre Results")
-//  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
-//  val curlResultsDataCentre = dataCentre.getResults
-  val qa = new CurlByDatabase(QA)
-  val results = qa.getResults
-  if(args.isEmpty) {
-//    if (curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)) {
-      Logger.info("Installed application flow : - ")
-    GoogleSetup.oauthOneTimeCode(results)
-//    } else {
-//      println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
-//    }
+  //  val skyscape = new CurlByDatabase(SkyScape) //SkyScape - SkyScape database
+  //  Logger.info("Getting SkyScape Results")
+  //  val curlResultsSkyScape = skyscape.getResults
+  Logger.info("Getting DataCentre Results")
+  val dataCentre = new CurlByDatabase(DataCentre) //DateCentre - DataCentre database
+  val curlResultsDataCentre = dataCentre.getResults
+  //  val qa = new CurlByDatabase(QA)
+  //  val results = qa.getResults
+  if (args.isEmpty) {
+    //    if (curlrequests.compareDataCentreResults(curlResultsDataCentre, curlResultsDataCentre)) {
+    Logger.info("Installed application flow : - ")
+    GoogleSetup.oauthOneTimeCode(curlResultsDataCentre)
+    //    } else {
+    //      println("DATACENTRES WERE NOT EQUAL POTENTIAL ERROR")
+    //    }
   } else {
     Logger.info("Admin Console flow : - ")
-    GoogleSetup.writeToSpreadSheet(args(0), results)
+    GoogleSetup.writeToSpreadSheet(args(0), curlResultsDataCentre)
   }
-//  GoogleSetup.oauthOneTimeCode(curlResults)
+  //  GoogleSetup.oauthOneTimeCode(curlResults)
 }

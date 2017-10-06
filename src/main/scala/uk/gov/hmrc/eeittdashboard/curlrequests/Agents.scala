@@ -16,18 +16,56 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
-import play.api.libs.json.JsValue
+import java.time.{ LocalDate, Period, ZoneId }
 
+import org.apache.http.impl.client.DefaultHttpClient
+import play.api.libs.json.{ JsValue, Json }
+import org.joda.time.DateTime
+import play.api.Logger
+import uk.gov.hmrc.play.http.{ HeaderCarrier, HttpPost }
+
+import scala.concurrent.Future
 import scala.sys.process.Process
+import scala.util.{ Failure, Success, Try }
+import scalaj.http.{ Http, HttpResponse }
 
-class Agents (dataCentre: String) extends Curl {
+class Agents(dataCentre: String) {
 
-  def getResults : List[String]= {
+  def getResults: List[String] = {
     splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
   }
 
-  def queryResults(start: Int, end: Int): JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./LiveAgent.sh $start $end $dataCentre $numberOfDays").!!)
+  def queryResults(start: Float, end: Float): JsValue = {
+    Logger.debug(s"quering Agents")
+    play.api.libs.json.Json.parse(call(start, end, queryJson, dataCentre).body)
+  }
+
+  def queryJson(start: Float, end: Float): String = {
+    s"""{
+      |  "size": 500,
+      |  "query": {
+      |    "bool": {
+      |      "must": [
+      |        {
+      |          "query_string": {
+      |            "analyze_wildcard": true,
+      |            "query": "app:eeitt AND NOT app:\\"eeitt-frontend\\" AND \\"registration of agent\\""
+      |          }
+      |        },
+      |        {
+      |          "range": {
+      |            "@timestamp": {
+      |              "gte": ${millis(start)},
+      |              "lte": ${millis(end)},
+      |              "format": "epoch_millis"
+      |            }
+      |          }
+      |        }
+      |      ],
+      |      "must_not": []
+      |    }
+      |  }
+      |}""".stripMargin
   }
 
 }

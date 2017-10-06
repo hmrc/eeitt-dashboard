@@ -16,18 +16,48 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
+import play.api.Logger
 import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
+import scala.math.exp
 
-class BackendVerification(dataCentre: String) extends Curl {
+class BackendVerification(dataCentre: String) {
 
-  def getResults : List[String]= {
+  def getResults: List[String] = {
     filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
   }
 
-  def queryResults(start: Int, end: Int) : JsValue = {
-    play.api.libs.json.Json.parse(Process(s"./BackendVerification.sh $start $end $dataCentre $numberOfDays").!!)
+  def queryResults(start: Float, end: Float): JsValue = {
+    Logger.debug(s"quering BackendVerification" + queryJson(0, 24))
+    play.api.libs.json.Json.parse(call(start, end, queryJson, dataCentre).body)
   }
 
+  def queryJson(start: Float, end: Float): String = {
+    s"""{
+      |  "size": 500,
+      |  "query": {
+      |    "bool": {
+      |      "must": [
+      |        {
+      |          "query_string": {
+      |            "analyze_wildcard": true,
+      |            "query": "app:eeitt AND NOT app:\\"eeitt-frontend\\" AND verification"
+      |          }
+      |        },
+      |        {
+      |          "range": {
+      |            "@timestamp": {
+      |              "gte": ${millis(start)},
+      |              "lte": ${millis(end)},
+      |              "format": "epoch_millis"
+      |            }
+      |          }
+      |        }
+      |      ],
+      |      "must_not": []
+      |    }
+      |  }
+      |}""".stripMargin
+  }
 }
