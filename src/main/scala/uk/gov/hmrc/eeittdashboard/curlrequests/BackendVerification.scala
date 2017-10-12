@@ -22,7 +22,7 @@ import play.api.libs.json.JsValue
 import scala.sys.process.Process
 import scala.math.exp
 
-class BackendVerification(dataCentre: String) {
+class BackendVerification(dataCentre: String, numberOfDays: Int) {
 
   def getResults: List[String] = {
     filterErrors(splitRequest(0, 24, is500, parseJsonFromRequest, queryResults))
@@ -48,8 +48,8 @@ class BackendVerification(dataCentre: String) {
       |        {
       |          "range": {
       |            "@timestamp": {
-      |              "gte": ${millis(start)},
-      |              "lte": ${millis(end)},
+      |              "gte": ${millis(start, numberOfDays)},
+      |              "lte": ${millis(end, numberOfDays)},
       |              "format": "epoch_millis"
       |            }
       |          }

@@ -23,7 +23,7 @@ import play.api.libs.json.JsValue
 
 import scala.sys.process.Process
 
-class BusinessUser(dataCentre: String) {
+class BusinessUser(dataCentre: String, numberOfDays: Int) {
 
   def getResults: List[String] = {
     splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
@@ -49,8 +49,8 @@ class BusinessUser(dataCentre: String) {
       |        {
       |          "range": {
       |            "@timestamp": {
-      |              "gte": ${millis(start)},
-      |              "lte": ${millis(end)},
+      |              "gte": ${millis(start, numberOfDays)},
+      |              "lte": ${millis(end, numberOfDays)},
       |              "format": "epoch_millis"
       |            }
       |          }

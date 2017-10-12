@@ -45,7 +45,6 @@ import scalaj.http.{ Http, HttpOptions }
 
 package object curlrequests {
 
-  val numberOfDays: Int = loadConfigOrThrow[NumberOfDays]("numberofdays").days
   lazy val loadApp = services.Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/main/resources/serviceAccount.json").mkString)
 
   case class AuthCredentials(username: String, password: String)
@@ -62,7 +61,7 @@ package object curlrequests {
       .postData(json(start, end)).asString
   }
 
-  def millis(int: Float): Long = {
+  def millis(int: Float, numberOfDays: Int): Long = {
     val b: Long = (int * 3600000).toLong
     val x: Long = (LocalDate.now.minus(Period.ofDays(numberOfDays)).atStartOfDay(ZoneId.of("Europe/London")).toEpochSecond * 1000).toLong + b
     println(x + "THIS IS X")

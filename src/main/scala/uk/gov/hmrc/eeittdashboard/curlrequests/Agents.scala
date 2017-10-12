@@ -29,7 +29,7 @@ import scala.sys.process.Process
 import scala.util.{ Failure, Success, Try }
 import scalaj.http.{ Http, HttpResponse }
 
-class Agents(dataCentre: String) {
+class Agents(dataCentre: String, numberOfDays: Int) {
 
   def getResults: List[String] = {
     splitRequest(0, 24, is500, parseJsonFromRequest, queryResults)
@@ -55,8 +55,8 @@ class Agents(dataCentre: String) {
       |        {
       |          "range": {
       |            "@timestamp": {
-      |              "gte": ${millis(start)},
-      |              "lte": ${millis(end)},
+      |              "gte": ${millis(start, numberOfDays)},
+      |              "lte": ${millis(end, numberOfDays)},
       |              "format": "epoch_millis"
       |            }
       |          }

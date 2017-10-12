@@ -37,6 +37,7 @@ import com.google.api.services.sheets.v4.{ Sheets, SheetsScopes }
 import com.google.api.services.sheets.v4.model.AppendValuesResponse
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.eeittdashboard.curlrequests
+import uk.gov.hmrc.eeittdashboard.curlrequests.NumberOfDays
 import uk.gov.hmrc.eeittdashboard.services.GoogleSheetsService
 import uk.gov.hmrc.eeittdashboard.services.{ AuthService, GoogleSheetsService, tokenUrlBase }
 
@@ -45,7 +46,7 @@ import scalaj.http.Http
 object GoogleSetup {
 
   val authService = new AuthService
-  val serviceSpreadSheet = new GoogleSheetsService
+  def serviceSpreadSheet(numberOfDays: Int) = new GoogleSheetsService(numberOfDays)
 
   //  No longer used due to more convient setup found, however could be useful in near future.
 
@@ -59,17 +60,17 @@ object GoogleSetup {
   //  }
 
   //Used to Dependency.
-  def writeToSpreadSheet(accessToken: String, results: Map[String, List[String]]) = {
+  def writeToSpreadSheet(accessToken: String, results: Map[String, List[String]], numberOfDays: Int) = {
     val credential = authService.passAuthToken(accessToken)
-    serviceSpreadSheet.populateWorksheetByFileId(credential, curlrequests.loadApp.fileId, results)
+    serviceSpreadSheet(numberOfDays).populateWorksheetByFileId(credential, curlrequests.loadApp.fileId, results)
   }
 
-  def printResults(results: Map[String, List[String]]) = {
-    serviceSpreadSheet.print(results)
+  def printResults(results: Map[String, List[String]], numberOfDays: Int) = {
+    serviceSpreadSheet(numberOfDays).print(results)
   }
 
-  def oauthOneTimeCode(results: Map[String, List[String]]): AppendValuesResponse = {
+  def oauthOneTimeCode(results: Map[String, List[String]], numberOfDays: Int): AppendValuesResponse = {
     val accessToken = authService.authorise()
-    serviceSpreadSheet.populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, results)
+    serviceSpreadSheet(numberOfDays).populateWorksheetByFileId(accessToken, curlrequests.loadApp.fileId, results)
   }
 }
