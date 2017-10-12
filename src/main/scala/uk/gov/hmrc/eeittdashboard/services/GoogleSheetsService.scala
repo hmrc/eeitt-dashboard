@@ -31,10 +31,8 @@ import scala.collection.JavaConverters._
 import scala.language.implicitConversions
 import scalaz.Scalaz._
 
-class GoogleSheetsService {
+class GoogleSheetsService(numberOfDays: Int) {
   //  lazy val loadApp = Json.fromJson[GoogleApp](scala.io.Source.fromFile("src/uk.gov.hmrc.eeittdashboard.main/resources/serviceAccount.json").mkString)
-
-  val numberOfDays = loadConfigOrThrow[NumberOfDays]("numberofdays").days
 
   def gDataApiForToken(credential: Credential): Sheets = {
 

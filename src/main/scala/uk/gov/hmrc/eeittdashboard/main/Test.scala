@@ -16,17 +16,19 @@
 
 package uk.gov.hmrc.eeittdashboard.main
 
+import pureconfig.loadConfigOrThrow
 import uk.gov.hmrc.eeittdashboard.curlrequests.CurlByDatabase
 import uk.gov.hmrc.eeittdashboard.googleapi.GoogleSetup
-import uk.gov.hmrc.eeittdashboard.models.QA
+import uk.gov.hmrc.eeittdashboard.models.{ NumberOfDays, QA }
 import uk.gov.hmrc.eeittdashboard.services.GoogleSheetsService
 import uk.gov.hmrc.eeittdashboard.services.{ AuthService, GoogleSheetsService }
 
 //sbt "run-uk.gov.hmrc.eeittdashboard.main uk.gov.hmrc.eeittdashboard.main.Test"
 object Test extends App {
 
+  val numberOfDays = loadConfigOrThrow[NumberOfDays]("numberofdays").days
   val inst = new AuthService
-  val sheets = new GoogleSheetsService
+  val sheets = new GoogleSheetsService(numberOfDays)
   //    val inst = new CurlByDatabase(QA) //QA - Qa database
   //    val curlResults = inst.getCurlResults
   //    val successResults = inst.getSuccessResults

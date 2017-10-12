@@ -22,7 +22,7 @@ import play.api.libs.json._
 
 import scala.sys.process.Process
 
-class SuccessfulSubmissions(form: Form, dataCentre: String) {
+class SuccessfulSubmissions(form: Form, dataCentre: String, numberOfDays: Int) {
 
   def getResults: List[String] = {
     Logger.debug(s"Getting successful submission for ${form.value}")
@@ -57,8 +57,8 @@ class SuccessfulSubmissions(form: Form, dataCentre: String) {
       |        {
       |          "range": {
       |            "@timestamp": {
-      |              "gte": ${millis(start)},
-      |              "lte": ${millis(end)},
+      |              "gte": ${millis(start, numberOfDays)},
+      |              "lte": ${millis(end, numberOfDays)},
       |              "format": "epoch_millis"
       |            }
       |          }
