@@ -60,7 +60,9 @@ class GoogleSheetsService(numberOfDays: Int) {
     println("AL: - " + toAnyRef(info("'AL'")) + "Succeded : - " + data("AggregatesLevy").size)
     println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
     println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
+    println("BF: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("Biofuels").size)
     println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDutyPayment").size + "Gaming Duty Returns" + data("GamingDuty").size)
+    println("GR: - " + toAnyRef(info("'GR'")) + "Succeded : - " + data("GasAsRoadFuel").size)
     println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
     println("LD: - " + toAnyRef(info("'LD'")) + "Succeded : - " + data("LotteryDuty").size)
     println("LF: - " + toAnyRef(info("'LF'")) + "Succeded : - " + data("LandFill").size)
@@ -88,7 +90,9 @@ class GoogleSheetsService(numberOfDays: Int) {
       toAnyRef(info("'AL'")),
       toAnyRef(info("'AP'")),
       toAnyRef(info("'BD'")),
+        toAnyRef(info("'BF'")),
       toAnyRef(info("'GD'")),
+        toAnyRef(info("'GR'")),
       toAnyRef(info("'IP'")),
       toAnyRef(info("'LD'")),
       toAnyRef(info("'LF'")),
@@ -98,7 +102,9 @@ class GoogleSheetsService(numberOfDays: Int) {
       toAnyRef(data("AggregatesLevy").size),
       toAnyRef(data("AirPassengerDuty").size),
       toAnyRef(data("BingoDuty").size),
+        toAnyRef(data("Biofuels").size),
       toAnyRef(data("GamingDutyPayment").size),
+        toAnyRef(data("GasAsRoadFuel").size),
       toAnyRef(data("InsurancePremiumTax").size),
       toAnyRef(data("LotteryDuty").size),
       toAnyRef(data("LandFill").size),
@@ -140,7 +146,7 @@ class GoogleSheetsService(numberOfDays: Int) {
 
   private def parseJsonData(data: List[String]): Map[String, Int] = {
     val groupedData = data.groupBy(o => o.split(" ")(8))
-    val map = Map("'AL'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'GD'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
+    val map = Map("'AL'" -> 0, "'BF'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'GD'" -> 0, "'GR'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
     val numData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
 
     numData |+| map

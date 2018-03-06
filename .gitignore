@@ -38,6 +38,7 @@ servicedata.json
 .sass-cache
 computeData.json
 serviceAccount.json
+application.conf
 .ensime*
 
 **/codekit-config.json
