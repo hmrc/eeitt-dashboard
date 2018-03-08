@@ -44,6 +44,11 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
   val aggregateLevy: SuccessfulSubmissions = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value), numberOfDays)
   val bingoDuty: SuccessfulSubmissions = new SuccessfulSubmissions(BingoDuty, dataCentres(environment.value), numberOfDays)
   val insurancePremiumTax: SuccessfulSubmissions = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value), numberOfDays)
+  val gamingDutyPaymentOnAccount: SuccessfulSubmissions = new SuccessfulSubmissions(GamingDutyPaymentOnAccount, dataCentres(environment.value), numberOfDays)
+  val corporateInterestAppointCompany: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestAppointCompany, dataCentres(environment.value), numberOfDays)
+  val corporateInterestRevokeCompany: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestRevokeCompany, dataCentres(environment.value), numberOfDays)
+  val gasAsRoadFuel: SuccessfulSubmissions = new SuccessfulSubmissions(GasAsRoadFuel, dataCentres(environment.value), numberOfDays)
+  val biofuels: SuccessfulSubmissions = new SuccessfulSubmissions(Biofuels, dataCentres(environment.value), numberOfDays)
 
   def getResults: Map[String, List[String]] = {
     //    println(Json.prettyPrint(airPassengerDuty.getResults.head))
@@ -56,6 +61,11 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
       "AggregatesLevy" -> aggregateLevy.getResults,
       "BingoDuty" -> bingoDuty.getResults,
       "InsurancePremiumTax" -> insurancePremiumTax.getResults,
+      "GamingDutyPaymentOnAccount" -> gamingDutyPaymentOnAccount.getResults,
+      "CorporateInterestAppointCompany" -> corporateInterestAppointCompany.getResults,
+      "CorporateInterestRevokeCompany" -> corporateInterestRevokeCompany.getResults,
+      "GasAsRoadFuel" -> gasAsRoadFuel.getResults,
+      "Biofuels" -> biofuels.getResults,
       "BusinessUsers" -> businessUser.getResults,
       "Agents" -> agents.getResults,
       "Backend" -> backendVerification.getResults,
