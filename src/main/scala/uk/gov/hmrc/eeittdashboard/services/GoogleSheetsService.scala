@@ -102,14 +102,17 @@ class GoogleSheetsService(numberOfDays: Int) {
       toAnyRef(data("AggregatesLevy").size),
       toAnyRef(data("AirPassengerDuty").size),
       toAnyRef(data("BingoDuty").size),
-        toAnyRef(data("Biofuels").size),
       toAnyRef(data("GamingDutyPayment").size),
-        toAnyRef(data("GasAsRoadFuel").size),
       toAnyRef(data("InsurancePremiumTax").size),
       toAnyRef(data("LotteryDuty").size),
       toAnyRef(data("LandFill").size),
-      toAnyRef(data("GamingDuty").size)
-    ).asJava
+      toAnyRef(data("GamingDuty").size),
+        toAnyRef(data("GamingDutyPaymentOnAccount").size),
+        toAnyRef(data("CorporateInterestAppointCompany").size),
+        toAnyRef(data("CorporateInterestRevokeCompany").size),
+        toAnyRef(data("GasAsRoadFuel").size),
+        toAnyRef(data("Biofuels").size)
+      ).asJava
     ).asJava
     val valuerange = new ValueRange
     valuerange.setRange("A1:E1")

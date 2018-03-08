@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eeittdashboard.curlrequests
 
-import uk.gov.hmrc.eeittdashboard.models.{ Environment, Form, LogLineContents }
+import uk.gov.hmrc.eeittdashboard.models._
 import play.api.Logger
 import play.api.libs.json._
 
@@ -35,6 +35,7 @@ class SuccessfulSubmissions(form: Form, dataCentre: String, numberOfDays: Int) {
   }
 
   def queryJson(start: Float, end: Float) = {
+    println(queryTerm)
     s"""{
       |  "size": 500,
       |  "sort": [
@@ -50,7 +51,7 @@ class SuccessfulSubmissions(form: Form, dataCentre: String, numberOfDays: Int) {
       |      "must": [
       |        {
       |          "query_string": {
-      |            "query": "type:\\"nginx access_json\\" AND request:forms AND request:submission AND request:receipt AND request:\\"${form.value}\\"",
+      |            "query": "${queryTerm}",
       |            "analyze_wildcard": true
       |          }
       |        },
@@ -107,7 +108,16 @@ class SuccessfulSubmissions(form: Form, dataCentre: String, numberOfDays: Int) {
       |    "streime"
       |  ]
       |}""".stripMargin
-  }
+
+    }
+
+    val queryTerm =
+      form match {
+        case iForm(iValue) =>
+          s"""type:\\"nginx access_json\\" AND server_name:\\"dfs-frontend.service\\" AND request:forms AND request:submission AND request:receipt AND request:\\"${iValue}\\""""
+        case gForm(gValue) =>
+          s"""type:\\"nginx access_json\\" AND server_name:\\"gform-frontend.service\\" AND request_method:POST AND request:\\"/submissions/declaration\\" AND request:\\"${gValue}\\""""
+      }
 
   def parseJsonFromRequestSuccessfulSubmissions(json: JsValue): List[String] = {
     (json \ "hits" \ "hits").validate[List[JsObject]] match {

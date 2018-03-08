@@ -16,12 +16,24 @@
 
 package uk.gov.hmrc.eeittdashboard.models
 
-case class Form(value: String)
-object LotteryDuty extends Form("promoters-monthly-lottery-duty-return")
-object BingoDuty extends Form("bingo-duty-promoters-monthly-return")
-object LandFill extends Form("landfill-tax-return")
-object AggregateLevy extends Form("aggregates-levy-return")
-object GamingDuty extends Form("gaming-duty-payment-on-account")
-object AirPassengerDuty extends Form("air-passenger-duty-return")
-object InsurancePremiumTax extends Form("insurance-premium-tax-return")
-object GamingDutyPayment extends Form("gaming-duty-return")
+sealed trait Form { val value:String }
+
+case class iForm(value: String )extends Form
+object LotteryDuty extends iForm("promoters-monthly-lottery-duty-return")
+object BingoDuty extends iForm("bingo-duty-promoters-monthly-return")
+object LandFill extends iForm("landfill-tax-return")
+object AggregateLevy extends iForm("aggregates-levy-return")
+object GamingDuty extends iForm("gaming-duty-payment-on-account")
+object AirPassengerDuty extends iForm("air-passenger-duty-return")
+object InsurancePremiumTax extends iForm("insurance-premium-tax-return")
+object GamingDutyPayment extends iForm("gaming-duty-return")
+
+case class gForm(value: String ) extends Form
+
+object GamingDutyPaymentOnAccount extends gForm("gd94-gaming-duty-payment-on-account")
+object CorporateInterestAppointCompany extends gForm("corporate-interest-appoint-company")
+object CorporateInterestRevokeCompany extends gForm("corporate-interest-revoke-company")
+object GasAsRoadFuel extends gForm("CE930-gas-as-road-fuel")
+object Biofuels extends gForm("HO930-biofuels")
+
+

@@ -18,7 +18,6 @@ package uk.gov.hmrc.eeittdashboard.curlrequests
 
 import java.time.{ LocalDate, Period, ZoneId }
 
-import org.apache.http.impl.client.DefaultHttpClient
 import play.api.libs.json.{ JsValue, Json }
 import org.joda.time.DateTime
 import play.api.Logger
