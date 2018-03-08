@@ -61,7 +61,7 @@ class GoogleSheetsService(numberOfDays: Int) {
     println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
     println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
     println("BF: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("Biofuels").size)
-    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDutyPayment").size + "Gaming Duty Returns" + data("GamingDuty").size)
+    println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDuty").size + "Gaming Duty Returns" + data("OldGamingDutyPaymentOnAccount").size)
     println("GR: - " + toAnyRef(info("'GR'")) + "Succeded : - " + data("GasAsRoadFuel").size)
     println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
     println("LD: - " + toAnyRef(info("'LD'")) + "Succeded : - " + data("LotteryDuty").size)
@@ -102,11 +102,11 @@ class GoogleSheetsService(numberOfDays: Int) {
       toAnyRef(data("AggregatesLevy").size),
       toAnyRef(data("AirPassengerDuty").size),
       toAnyRef(data("BingoDuty").size),
-      toAnyRef(data("GamingDutyPayment").size),
+      toAnyRef(data("GamingDuty").size),
       toAnyRef(data("InsurancePremiumTax").size),
       toAnyRef(data("LotteryDuty").size),
       toAnyRef(data("LandFill").size),
-      toAnyRef(data("GamingDuty").size),
+      toAnyRef(data("OldGamingDutyPaymentOnAccount").size),
         toAnyRef(data("GamingDutyPaymentOnAccount").size),
         toAnyRef(data("CorporateInterestAppointCompany").size),
         toAnyRef(data("CorporateInterestRevokeCompany").size),

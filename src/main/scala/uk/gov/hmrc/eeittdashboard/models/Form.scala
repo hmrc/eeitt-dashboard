@@ -23,10 +23,10 @@ object LotteryDuty extends iForm("promoters-monthly-lottery-duty-return")
 object BingoDuty extends iForm("bingo-duty-promoters-monthly-return")
 object LandFill extends iForm("landfill-tax-return")
 object AggregateLevy extends iForm("aggregates-levy-return")
-object GamingDuty extends iForm("gaming-duty-payment-on-account")
+object OldGamingDutyPaymentOnAccount extends iForm("gaming-duty-payment-on-account")
 object AirPassengerDuty extends iForm("air-passenger-duty-return")
 object InsurancePremiumTax extends iForm("insurance-premium-tax-return")
-object GamingDutyPayment extends iForm("gaming-duty-return")
+object GamingDuty extends iForm("gaming-duty-return")
 
 case class gForm(value: String ) extends Form
 

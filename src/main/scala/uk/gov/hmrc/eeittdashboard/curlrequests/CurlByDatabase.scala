@@ -37,8 +37,8 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
   val backendVerification: BackendVerification = new BackendVerification(dataCentres(environment.value), numberOfDays)
 
   val lotteryDuty: SuccessfulSubmissions = new SuccessfulSubmissions(LotteryDuty, dataCentres(environment.value), numberOfDays)
+  val oldGamingDutyPaymentOnAccount: SuccessfulSubmissions = new SuccessfulSubmissions(OldGamingDutyPaymentOnAccount, dataCentres(environment.value), numberOfDays)
   val gamingDuty: SuccessfulSubmissions = new SuccessfulSubmissions(GamingDuty, dataCentres(environment.value), numberOfDays)
-  val gamingDutyPayment: SuccessfulSubmissions = new SuccessfulSubmissions(GamingDutyPayment, dataCentres(environment.value), numberOfDays)
   val airPassengerDuty = new SuccessfulSubmissions(AirPassengerDuty, dataCentres(environment.value), numberOfDays)
   val landFill: SuccessfulSubmissions = new SuccessfulSubmissions(LandFill, dataCentres(environment.value), numberOfDays)
   val aggregateLevy: SuccessfulSubmissions = new SuccessfulSubmissions(AggregateLevy, dataCentres(environment.value), numberOfDays)
@@ -54,8 +54,8 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
     //    println(Json.prettyPrint(airPassengerDuty.getResults.head))
     Map(
       "LotteryDuty" -> lotteryDuty.getResults,
+      "OldGamingDutyPaymentOnAccount" -> oldGamingDutyPaymentOnAccount.getResults,
       "GamingDuty" -> gamingDuty.getResults,
-      "GamingDutyPayment" -> gamingDutyPayment.getResults,
       "AirPassengerDuty" -> airPassengerDuty.getResults,
       "LandFill" -> landFill.getResults,
       "AggregatesLevy" -> aggregateLevy.getResults,
