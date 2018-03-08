@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.eeittdashboard.services
 
-import java.time.{ LocalDate, Period }
+import java.time.{LocalDate, Period}
 
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -84,29 +84,29 @@ class GoogleSheetsService(numberOfDays: Int) {
 
     val values: java.util.List[java.util.List[AnyRef]] = Seq(
       Seq(
-      toAnyRef(date.toString),
-      toAnyRef(totalBuissnessUsers),
-      toAnyRef(dataOfAgents),
-      toAnyRef(info("'AL'")),
-      toAnyRef(info("'AP'")),
-      toAnyRef(info("'BD'")),
+        toAnyRef(date.toString),
+        toAnyRef(totalBuissnessUsers),
+        toAnyRef(dataOfAgents),
+        toAnyRef(info("'AL'")),
+        toAnyRef(info("'AP'")),
+        toAnyRef(info("'BD'")),
         toAnyRef(info("'BF'")),
-      toAnyRef(info("'GD'")),
+        toAnyRef(info("'GD'")),
         toAnyRef(info("'GR'")),
-      toAnyRef(info("'IP'")),
-      toAnyRef(info("'LD'")),
-      toAnyRef(info("'LF'")),
-      toAnyRef(data("Frontend").size),
-      toAnyRef(data("Backend").size),
-      toAnyRef(uniqueUsers),
-      toAnyRef(data("AggregatesLevy").size),
-      toAnyRef(data("AirPassengerDuty").size),
-      toAnyRef(data("BingoDuty").size),
-      toAnyRef(data("GamingDuty").size),
-      toAnyRef(data("InsurancePremiumTax").size),
-      toAnyRef(data("LotteryDuty").size),
-      toAnyRef(data("LandFill").size),
-      toAnyRef(data("OldGamingDutyPaymentOnAccount").size),
+        toAnyRef(info("'IP'")),
+        toAnyRef(info("'LD'")),
+        toAnyRef(info("'LF'")),
+        toAnyRef(data("Frontend").size),
+        toAnyRef(data("Backend").size),
+        toAnyRef(uniqueUsers),
+        toAnyRef(data("AggregatesLevy").size),
+        toAnyRef(data("AirPassengerDuty").size),
+        toAnyRef(data("BingoDuty").size),
+        toAnyRef(data("GamingDuty").size),
+        toAnyRef(data("InsurancePremiumTax").size),
+        toAnyRef(data("LotteryDuty").size),
+        toAnyRef(data("LandFill").size),
+        toAnyRef(data("OldGamingDutyPaymentOnAccount").size),
         toAnyRef(data("GamingDutyPaymentOnAccount").size),
         toAnyRef(data("CorporateInterestAppointCompany").size),
         toAnyRef(data("CorporateInterestRevokeCompany").size),
