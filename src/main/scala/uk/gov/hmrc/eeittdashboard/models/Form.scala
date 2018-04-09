@@ -33,7 +33,9 @@ case class gForm(value: String ) extends Form
 object GamingDutyPaymentOnAccount extends gForm("gd94-gaming-duty-payment-on-account")
 object CorporateInterestAppointCompany extends gForm("corporate-interest-appoint-company")
 object CorporateInterestRevokeCompany extends gForm("corporate-interest-revoke-company")
+object CorporateInterestReturn extends gForm("corporate-interest-return")
 object GasAsRoadFuel extends gForm("CE930-gas-as-road-fuel")
 object Biofuels extends gForm("HO930-biofuels")
+object FuelRemovedFromWarehouse extends gForm("HO10-fuel-removed-from-warehouse")
 
 

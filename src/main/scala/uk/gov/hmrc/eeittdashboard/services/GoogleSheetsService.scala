@@ -49,7 +49,6 @@ class GoogleSheetsService(numberOfDays: Int) {
   def print(data: Map[String, List[String]]): Unit = {
 
     val uniqueUsers = parseVerificationJsonData(data("Backend"))
-    2
     val info = parseJsonData(data("BusinessUsers"))
     val totalBuissnessUsers: Int = info.values.sum
     val dataOfAgents: Int = data("Agents").size
@@ -60,7 +59,8 @@ class GoogleSheetsService(numberOfDays: Int) {
     println("AL: - " + toAnyRef(info("'AL'")) + "Succeded : - " + data("AggregatesLevy").size)
     println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
     println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
-    println("BF: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("Biofuels").size)
+    println("BF: - " + toAnyRef(info("'BF'")) + "Succeded : - " + data("Biofuels").size)
+    println("FD: - " + toAnyRef(info("'FD'")) + "Succeded : - " + data("FuelRemovedFromWarehouse").size)
     println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDuty").size + "Gaming Duty Returns" + data("OldGamingDutyPaymentOnAccount").size)
     println("GR: - " + toAnyRef(info("'GR'")) + "Succeded : - " + data("GasAsRoadFuel").size)
     println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
@@ -91,6 +91,7 @@ class GoogleSheetsService(numberOfDays: Int) {
         toAnyRef(info("'AP'")),
         toAnyRef(info("'BD'")),
         toAnyRef(info("'BF'")),
+        toAnyRef(info("'FD'")),
         toAnyRef(info("'GD'")),
         toAnyRef(info("'GR'")),
         toAnyRef(info("'IP'")),
@@ -110,8 +111,10 @@ class GoogleSheetsService(numberOfDays: Int) {
         toAnyRef(data("GamingDutyPaymentOnAccount").size),
         toAnyRef(data("CorporateInterestAppointCompany").size),
         toAnyRef(data("CorporateInterestRevokeCompany").size),
+        toAnyRef(data("CorporateInterestReturn").size),
         toAnyRef(data("GasAsRoadFuel").size),
-        toAnyRef(data("Biofuels").size)
+        toAnyRef(data("Biofuels").size),
+        toAnyRef(data("FuelRemovedFromWarehouse").size)
       ).asJava
     ).asJava
     val valuerange = new ValueRange
@@ -149,7 +152,7 @@ class GoogleSheetsService(numberOfDays: Int) {
 
   private def parseJsonData(data: List[String]): Map[String, Int] = {
     val groupedData = data.groupBy(o => o.split(" ")(8))
-    val map = Map("'AL'" -> 0, "'BF'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'GD'" -> 0, "'GR'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
+    val map = Map("'AL'" -> 0, "'BF'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'FD'" -> 0, "'GD'" -> 0, "'GR'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
     val numData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
 
     numData |+| map

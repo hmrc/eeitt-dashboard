@@ -46,9 +46,11 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
   val insurancePremiumTax: SuccessfulSubmissions = new SuccessfulSubmissions(InsurancePremiumTax, dataCentres(environment.value), numberOfDays)
   val gamingDutyPaymentOnAccount: SuccessfulSubmissions = new SuccessfulSubmissions(GamingDutyPaymentOnAccount, dataCentres(environment.value), numberOfDays)
   val corporateInterestAppointCompany: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestAppointCompany, dataCentres(environment.value), numberOfDays)
-  val corporateInterestRevokeCompany: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestRevokeCompany, dataCentres(environment.value), numberOfDays)
+  val corporateInterestRevokeCompany: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestReturn, dataCentres(environment.value), numberOfDays)
+  val corporateInterestReturn: SuccessfulSubmissions = new SuccessfulSubmissions(CorporateInterestRevokeCompany, dataCentres(environment.value), numberOfDays)
   val gasAsRoadFuel: SuccessfulSubmissions = new SuccessfulSubmissions(GasAsRoadFuel, dataCentres(environment.value), numberOfDays)
   val biofuels: SuccessfulSubmissions = new SuccessfulSubmissions(Biofuels, dataCentres(environment.value), numberOfDays)
+  val fuelRemovedFromWarehouse: SuccessfulSubmissions = new SuccessfulSubmissions(FuelRemovedFromWarehouse, dataCentres(environment.value), numberOfDays)
 
   def getResults: Map[String, List[String]] = {
     //    println(Json.prettyPrint(airPassengerDuty.getResults.head))
@@ -64,8 +66,10 @@ class CurlByDatabase(environment: Environment, numberOfDays: Int) {
       "GamingDutyPaymentOnAccount" -> gamingDutyPaymentOnAccount.getResults,
       "CorporateInterestAppointCompany" -> corporateInterestAppointCompany.getResults,
       "CorporateInterestRevokeCompany" -> corporateInterestRevokeCompany.getResults,
+      "CorporateInterestReturn" -> corporateInterestReturn.getResults,
       "GasAsRoadFuel" -> gasAsRoadFuel.getResults,
       "Biofuels" -> biofuels.getResults,
+      "FuelRemovedFromWarehouse" -> fuelRemovedFromWarehouse.getResults,
       "BusinessUsers" -> businessUser.getResults,
       "Agents" -> agents.getResults,
       "Backend" -> backendVerification.getResults,
