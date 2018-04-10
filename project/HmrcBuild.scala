@@ -56,13 +56,14 @@ import BuildDependenices._
     .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
     .settings(
       name := appName,
-      scalaVersion := "2.11.6",
+      scalaVersion := "2.11.11",
       libraryDependencies ++= appDependencies,
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
-        Resolver.typesafeRepo("releases")
+        Resolver.typesafeRepo("releases"),
+        Resolver.jcenterRepo
       ),
-      crossScalaVersions := Seq("2.11.6")
+      crossScalaVersions := Seq("2.11.11")
     )
     .settings(unmanagedResourceDirectories in sbt.Compile += baseDirectory.value / "resources")
     .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
