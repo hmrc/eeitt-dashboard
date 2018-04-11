@@ -60,7 +60,7 @@ class GoogleSheetsService(numberOfDays: Int) {
     println("AP: - " + toAnyRef(info("'AP'")) + "Succeded : - " + data("AirPassengerDuty").size)
     println("BD: - " + toAnyRef(info("'BD'")) + "Succeded : - " + data("BingoDuty").size)
     println("BF: - " + toAnyRef(info("'BF'")) + "Succeded : - " + data("Biofuels").size)
-    println("FD: - " + toAnyRef(info("'FD'")) + "Succeded : - " + data("FuelRemovedFromWarehouse").size)
+    println("DA: - " + toAnyRef(info("'DA'")) + "Succeded : - " + data("FuelRemovedFromWarehouse").size)
     println("GD: - " + toAnyRef(info("'GD'")) + "Succeded : - " + data("GamingDuty").size + "Gaming Duty Returns" + data("OldGamingDutyPaymentOnAccount").size)
     println("GR: - " + toAnyRef(info("'GR'")) + "Succeded : - " + data("GasAsRoadFuel").size)
     println("IP: - " + toAnyRef(info("'IP'")) + "Succeded : - " + data("InsurancePremiumTax").size)
@@ -91,7 +91,7 @@ class GoogleSheetsService(numberOfDays: Int) {
         toAnyRef(info("'AP'")),
         toAnyRef(info("'BD'")),
         toAnyRef(info("'BF'")),
-        toAnyRef(info("'FD'")),
+        toAnyRef(info("'DA'")),
         toAnyRef(info("'GD'")),
         toAnyRef(info("'GR'")),
         toAnyRef(info("'IP'")),
@@ -152,7 +152,7 @@ class GoogleSheetsService(numberOfDays: Int) {
 
   private def parseJsonData(data: List[String]): Map[String, Int] = {
     val groupedData = data.groupBy(o => o.split(" ")(8))
-    val map = Map("'AL'" -> 0, "'BF'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'FD'" -> 0, "'GD'" -> 0, "'GR'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
+    val map = Map("'AL'" -> 0, "'BF'" -> 0, "'AP'" -> 0, "'BD'" -> 0, "'DA'" -> 0, "'GD'" -> 0, "'GR'" -> 0, "'IP'" -> 0, "'LD'" -> 0, "'LF'" -> 0)
     val numData: Map[String, Int] = groupedData.map(o => o._1 -> o._2.size)
 
     numData |+| map
