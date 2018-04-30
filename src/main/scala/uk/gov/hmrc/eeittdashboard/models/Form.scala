@@ -24,7 +24,6 @@ object BingoDuty extends iForm("bingo-duty-promoters-monthly-return")
 object LandFill extends iForm("landfill-tax-return")
 object AggregateLevy extends iForm("aggregates-levy-return")
 object OldGamingDutyPaymentOnAccount extends iForm("gaming-duty-payment-on-account")
-object AirPassengerDuty extends iForm("air-passenger-duty-return")
 object InsurancePremiumTax extends iForm("insurance-premium-tax-return")
 object GamingDuty extends iForm("gaming-duty-return")
 
@@ -37,5 +36,6 @@ object CorporateInterestReturn extends gForm("corporate-interest-return")
 object GasAsRoadFuel extends gForm("CE930-gas-as-road-fuel")
 object Biofuels extends gForm("HO930-biofuels")
 object FuelRemovedFromWarehouse extends gForm("HO10-fuel-removed-from-warehouse")
+object AirPassengerDuty extends gForm("APD2-air-passenger-duty-return")
 
 
